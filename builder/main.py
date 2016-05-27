@@ -169,7 +169,8 @@ env.Append(
 )
 
 
-if isfile(join(platform.get_package_dir("tool-teensy"), "teensy_loader_cli")):
+if isfile(join(platform.get_package_dir("tool-teensy") or "",
+               "teensy_loader_cli")):
     env.Append(
         UPLOADER="teensy_loader_cli",
         UPLOADERFLAGS=[
@@ -187,7 +188,7 @@ else:
         UPLOADERFLAGS=[
             "-file=firmware",
             '-path="$BUILD_DIR"',
-            '-tools="%s"' % platform.get_package_dir("tool-teensy")
+            '-tools="%s"' % (platform.get_package_dir("tool-teensy") or "")
         ],
         UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS'
     )
