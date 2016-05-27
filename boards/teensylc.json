@@ -1,0 +1,20 @@
+{
+  "build": {
+    "core": "teensy3", 
+    "cpu": "cortex-m0plus", 
+    "extra_flags": "-D__MKL26Z64__", 
+    "f_cpu": "48000000L", 
+    "ldscript": "mkl26z64.ld", 
+    "mcu": "mkl26z64"
+  }, 
+  "frameworks": [
+    "arduino"
+  ], 
+  "name": "Teensy LC", 
+  "upload": {
+    "maximum_ram_size": 8192, 
+    "maximum_size": 63488
+  }, 
+  "url": "http://www.pjrc.com/teensy/teensyLC.html", 
+  "vendor": "Teensy"
+}
