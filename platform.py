@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from platformio.managers.platform import BasePlatform
+from platformio.managers.platform import PlatformBase
 
 
-class TeensyPlatform(BasePlatform):
+class TeensyPlatform(PlatformBase):
 
     def configure_default_packages(self, variables, targets):
         if variables.get("board"):
@@ -27,5 +27,5 @@ class TeensyPlatform(BasePlatform):
             if disable_toolchain in self.packages:
                 del self.packages[disable_toolchain]
 
-        return BasePlatform.configure_default_packages(
+        return PlatformBase.configure_default_packages(
             self, variables, targets)
