@@ -24,8 +24,8 @@ class TeensyPlatform(BasePlatform):
                 disable_toolchain = "toolchain-gccarmnoneeabi"
             else:
                 disable_toolchain = "toolchain-atmelavr"
-            if disable_toolchain in self.get_packages():
-                del self.get_packages()[disable_toolchain]
+            if disable_toolchain in self.packages:
+                del self.packages[disable_toolchain]
 
         return BasePlatform.configure_default_packages(
             self, variables, targets)
