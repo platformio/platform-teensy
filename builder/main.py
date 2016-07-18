@@ -45,7 +45,6 @@ env.Replace(
 
     CPPDEFINES=[
         "F_CPU=$BOARD_F_CPU",
-        "USB_SERIAL",
         "LAYOUT_US_ENGLISH"
     ],
 
