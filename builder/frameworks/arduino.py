@@ -34,23 +34,24 @@ FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoteensy")
 FRAMEWORK_VERSION = platform.get_package_version("framework-arduinoteensy")
 assert isdir(FRAMEWORK_DIR)
 
-# USB flags
-ARDUINO_USBDEFINES = [
-    "ARDUINO=10600",
-    "TEENSYDUINO=%s" % FRAMEWORK_VERSION.split(".")[1]
-]
-if "build.usb_product" in env.BoardConfig():
-    ARDUINO_USBDEFINES += [
-        "USB_VID=%s" % env.BoardConfig().get("build.hwids")[0][0],
-        "USB_PID=%s" % env.BoardConfig().get("build.hwids")[0][1],
-        'USB_PRODUCT=\\"%s\\"' % (
-            env.BoardConfig().get("build.usb_product", "").replace('"', "")),
-        'USB_MANUFACTURER=\\"%s\\"' % (
-            env.BoardConfig().get("vendor", "").replace('"', ""))
-    ]
+BUILTIN_USB_FLAGS = (
+    "USB_HID",
+    "USB_SERIAL_HID",
+    "USB_DISK",
+    "USB_DISK_SDFLASH",
+    "USB_MIDI",
+    "USB_RAWHID",
+    "USB_FLIGHTSIM",
+    "USB_DISABLED"
+)
+if not any(f in env.get("BUILD_FLAGS", []) for f in BUILTIN_USB_FLAGS):
+    env.Append(CPPDEFINES=["USB_SERIAL"])
 
 env.Append(
-    CPPDEFINES=ARDUINO_USBDEFINES,
+    CPPDEFINES=[
+        "ARDUINO=10600",
+        "TEENSYDUINO=%s" % FRAMEWORK_VERSION.split(".")[1]
+    ],
 
     CPPPATH=[
         join("$BUILD_DIR", "FrameworkArduino")
@@ -63,6 +64,8 @@ env.Append(
 
 # Teensy 2.x Core
 if env.BoardConfig().get("build.core") == "teensy":
+    env.Append(CPPPATH=[join(FRAMEWORK_DIR, "cores")])
+
     # search relative includes in teensy directories
     core_dir = join(FRAMEWORK_DIR, "cores", "teensy")
     for item in sorted(listdir(core_dir)):
