@@ -21,11 +21,10 @@ class TeensyPlatform(PlatformBase):
         if variables.get("board"):
             board_config = self.board_config(variables.get("board"))
             if board_config.get("build.core") == "teensy":
-                disable_toolchain = "toolchain-gccarmnoneeabi"
+                toolchain = "toolchain-atmelavr"
             else:
-                disable_toolchain = "toolchain-atmelavr"
-            if disable_toolchain in self.packages:
-                del self.packages[disable_toolchain]
+                toolchain = "toolchain-gccarmnoneeabi"
+            self.packages[toolchain]['optional'] = False
 
         return PlatformBase.configure_default_packages(
             self, variables, targets)
