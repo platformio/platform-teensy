@@ -1,0 +1,62 @@
+{
+  "name": "teensy",
+  "title": "Teensy",
+  "description": "Teensy is a complete USB-based microcontroller development system, in a very small footprint, capable of implementing many types of projects. All programming is done via the USB port. No special programmer is needed, only a standard USB cable and a PC or Macintosh with a USB port.",
+  "url": "ttps://www.pjrc.com/teensy",
+  "homepage": "http://platformio.org/platforms/teensy",
+  "license": {
+    "type": "Apache-2.0",
+    "url": "http://opensource.org/licenses/apache2.0.php"
+  },
+  "engines": {
+    "platformio": "~3.0.0",
+    "scons": ">=2.3.0,<2.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/platformio/platform-teensy.git"
+  },
+  "version": "0.1.0",
+  "packageRepositories": [
+    "https://dl.bintray.com/platformio/dl-packages/manifest.json",
+    "https://sourceforge.net/projects/platformio-storage/files/packages/manifest.json/download",
+    "http://dl.platformio.org/packages/manifest.json"
+  ],
+  "frameworks": {
+    "arduino": {
+      "package": "framework-arduinoteensy",
+      "script": "builder/frameworks/arduino.py"
+    },
+    "mbed": {
+      "package": "framework-mbed",
+      "script": "builder/frameworks/mbed/mbed.py"
+    }
+  },
+  "packages": {
+    "toolchain-atmelavr": {
+      "type": "toolchain",
+      "optional": true,
+      "version": "~1.40801.0"
+    },
+    "toolchain-gccarmnoneeabi": {
+      "type": "toolchain",
+      "optional": true,
+      "version": ">=1.40803.0,<1.40805.0"
+    },
+    "framework-arduinoteensy": {
+      "type": "framework",
+      "optional": true,
+      "version": "~1.128.0"
+    },
+    "framework-mbed": {
+      "type": "framework",
+      "optional": true,
+      "version": "~1.121.0"
+    },
+    "tool-teensy": {
+      "type": "uploader",
+      "optional": true,
+      "version": "~1.1.0"
+    }
+  }
+}
