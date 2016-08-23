@@ -2,7 +2,7 @@
   "build": {
     "core": "teensy3", 
     "cpu": "cortex-m4", 
-    "extra_flags": "-D__MK20DX256__", 
+    "extra_flags": "-D__MK20DX256__ -DTEENSY31", 
     "f_cpu": "72000000L", 
     "ldscript": "mk20dx256.ld", 
     "mcu": "mk20dx256"
