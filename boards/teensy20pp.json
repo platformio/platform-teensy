@@ -1,6 +1,7 @@
 {
   "build": {
-    "core": "teensy", 
+    "core": "teensy",
+    "extra_flags": "-DTEENSY2PP",
     "f_cpu": "16000000L", 
     "mcu": "at90usb1286"
   }, 

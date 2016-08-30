@@ -82,7 +82,7 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
         ],
         BUILDERS=dict(
             ElfToEep=Builder(
-                action=" ".join([
+                action=env.VerboseAction(" ".join([
                     "$OBJCOPY",
                     "-O",
                     "ihex",
@@ -93,19 +93,21 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
                     "--change-section-lma",
                     ".eeprom=0",
                     "$SOURCES",
-                    "$TARGET"]),
+                    "$TARGET"
+                ]), "Building $TARGET"),
                 suffix=".eep"
             ),
 
             ElfToHex=Builder(
-                action=" ".join([
+                action=env.VerboseAction(" ".join([
                     "$OBJCOPY",
                     "-O",
                     "ihex",
                     "-R",
                     ".eeprom",
                     "$SOURCES",
-                    "$TARGET"]),
+                    "$TARGET"
+                ]), "Building $TARGET"),
                 suffix=".hex"
             )
         )
@@ -141,23 +143,25 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
         LIBS=["c", "gcc"],
         BUILDERS=dict(
             ElfToBin=Builder(
-                action=" ".join([
+                action=env.VerboseAction(" ".join([
                     "$OBJCOPY",
                     "-O",
                     "binary",
                     "$SOURCES",
-                    "$TARGET"]),
+                    "$TARGET"
+                ]), "Building $TARGET"),
                 suffix=".bin"
             ),
             ElfToHex=Builder(
-                action=" ".join([
+                action=env.VerboseAction(" ".join([
                     "$OBJCOPY",
                     "-O",
                     "ihex",
                     "-R",
                     ".eeprom",
                     "$SOURCES",
-                    "$TARGET"]),
+                    "$TARGET"
+                ]), "Building $TARGET"),
                 suffix=".hex"
             )
         )
@@ -211,26 +215,23 @@ else:
 # Target: Print binary size
 #
 
-target_size = env.Alias("size", target_elf, "$SIZEPRINTCMD")
+target_size = env.Alias(
+    "size", target_elf,
+    env.VerboseAction("$SIZEPRINTCMD", "Calculating size $SOURCE"))
 AlwaysBuild(target_size)
 
 #
 # Target: Upload by default firmware file
 #
 
-upload = env.Alias(
-    ["upload", "uploadlazy"], target_firm,
-    ["$UPLOADHEXCMD"] + (["$REBOOTER"] if "REBOOTER" in env else []))
+upload = env.Alias(["upload", "uploadlazy"], target_firm,
+                   [env.VerboseAction("$UPLOADHEXCMD", "Uploading $SOURCE")] +
+                   ([env.VerboseAction("$REBOOTER", "Rebooting...")]
+                    if "REBOOTER" in env else []))
 AlwaysBuild(upload)
 
 #
-# Target: Unit Testing
-#
-
-AlwaysBuild(env.Alias("test", [target_firm, target_size]))
-
-#
-# Target: Define targets
+# Default targets
 #
 
 Default([target_firm, target_size])

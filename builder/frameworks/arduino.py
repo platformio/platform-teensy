@@ -54,7 +54,7 @@ env.Append(
     ],
 
     CPPPATH=[
-        join("$BUILD_DIR", "FrameworkArduino")
+        join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
     ],
 
     LIBSOURCE_DIRS=[
@@ -93,7 +93,8 @@ libs = []
 if "build.variant" in env.BoardConfig():
     env.Append(
         CPPPATH=[
-            join("$BUILD_DIR", "FrameworkArduinoVariant")
+            join(FRAMEWORK_DIR, "variants",
+                 env.BoardConfig().get("build.variant"))
         ]
     )
     libs.append(env.BuildLibrary(
