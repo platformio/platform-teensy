@@ -231,13 +231,7 @@ upload = env.Alias(["upload", "uploadlazy"], target_firm,
 AlwaysBuild(upload)
 
 #
-# Target: Unit Testing
-#
-
-AlwaysBuild(env.Alias("test", [target_firm, target_size]))
-
-#
-# Target: Define targets
+# Default targets
 #
 
 Default([target_firm, target_size])
