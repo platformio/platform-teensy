@@ -140,7 +140,11 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-fsingle-precision-constant",
             "--specs=nano.specs"
         ],
-        LIBS=["c", "gcc"],
+        LIBS=[
+            "c", "gcc", "arm_cortex%sl_math" %
+            ("M4" if env.BoardConfig().get(
+                "build.cpu") == "cortex-m4" else "M0")
+        ],
         BUILDERS=dict(
             ElfToBin=Builder(
                 action=env.VerboseAction(" ".join([
@@ -166,24 +170,31 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             )
         )
     )
+    if env.BoardConfig().id_ in ("teensy35", "teensy36"):
+        env.Append(
+            LINKFLAGS=["-mfloat-abi=hard", "-mfpu=fpv4-sp-d16"],
+            CCFLAGS=["-mfloat-abi=hard", "-mfpu=fpv4-sp-d16"]
+        )
 
 env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
 )
 
 
-if isfile(join(platform.get_package_dir("tool-teensy") or "",
-               "teensy_loader_cli")):
+if (isfile(
+        join(
+            platform.get_package_dir("tool-teensy") or "",
+            "teensy_loader_cli")) and
+        env.BoardConfig().id_ not in ("teensy35", "teensy36")):
     env.Append(
         UPLOADER="teensy_loader_cli",
         UPLOADERFLAGS=[
             "-mmcu=$BOARD_MCU",
             "-w",  # wait for device to apear
             "-s",  # soft reboot if device not online
-            "-v"   # verbose output
+            "-v"  # verbose output
         ],
-        UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS $SOURCES'
-    )
+        UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS $SOURCES')
 else:
     env.Append(
         REBOOTER="teensy_reboot",

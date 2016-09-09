@@ -1,0 +1,20 @@
+{
+  "build": {
+    "core": "teensy3",
+    "cpu": "cortex-m4",
+    "extra_flags": "-D__MK64FX512__ -DTEENSY35",
+    "f_cpu": "120000000L",
+    "ldscript": "mk64fx512.ld",
+    "mcu": "mk64fx512"
+  },
+  "frameworks": [
+    "arduino"
+  ],
+  "name": "Teensy 3.5",
+  "upload": {
+    "maximum_ram_size": 196608,
+    "maximum_size": 524288
+  },
+  "url": "https://www.pjrc.com",
+  "vendor": "Teensy"
+}
