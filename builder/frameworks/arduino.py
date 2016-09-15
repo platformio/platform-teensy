@@ -83,6 +83,8 @@ if env.BoardConfig().get("build.core") == "teensy":
             continue
         with open(file_path, "w") as fp:
             fp.write(content)
+else:
+    env.Prepend(LIBPATH=[join(FRAMEWORK_DIR, "cores", "teensy3")])
 
 #
 # Target: Build Core Library
@@ -102,13 +104,7 @@ if "build.variant" in env.BoardConfig():
         join(FRAMEWORK_DIR, "variants", env.BoardConfig().get("build.variant"))
     ))
 
-envsafe = env.Clone()
-
-if env.BoardConfig().get("build.core") == "teensy3":
-    libs.append("arm_cortex%sl_math" % (
-        "M4" if env.BoardConfig().get("build.cpu") == "cortex-m4" else "M0"))
-
-libs.append(envsafe.BuildLibrary(
+libs.append(env.BuildLibrary(
     join("$BUILD_DIR", "FrameworkArduino"),
     join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
 ))
