@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-    Builder for Teensy boards
-"""
-
 from os.path import isfile, join
 
 from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
@@ -211,16 +207,15 @@ else:
 # Target: Build executable and linkable firmware
 #
 
-target_elf = env.BuildProgram()
-
-#
-# Target: Build the firmware file
-#
-
-if "uploadlazy" in COMMAND_LINE_TARGETS:
+target_elf = None
+if "nobuild" in COMMAND_LINE_TARGETS:
     target_firm = join("$BUILD_DIR", "firmware.hex")
 else:
+    target_elf = env.BuildProgram()
     target_firm = env.ElfToHex(join("$BUILD_DIR", "firmware"), target_elf)
+
+AlwaysBuild(env.Alias("nobuild", target_firm))
+target_buildprog = env.Alias("buildprog", target_firm)
 
 #
 # Target: Print binary size
@@ -235,14 +230,15 @@ AlwaysBuild(target_size)
 # Target: Upload by default firmware file
 #
 
-upload = env.Alias(["upload", "uploadlazy"], target_firm,
-                   [env.VerboseAction("$UPLOADHEXCMD", "Uploading $SOURCE")] +
-                   ([env.VerboseAction("$REBOOTER", "Rebooting...")]
-                    if "REBOOTER" in env else []))
-AlwaysBuild(upload)
+target_upload = env.Alias(
+    "upload", target_firm,
+    [env.VerboseAction("$UPLOADHEXCMD", "Uploading $SOURCE")] +
+    ([env.VerboseAction("$REBOOTER", "Rebooting...")]
+     if "REBOOTER" in env else []))
+AlwaysBuild(target_upload)
 
 #
 # Default targets
 #
 
-Default([target_firm, target_size])
+Default([target_buildprog, target_size])
