@@ -35,6 +35,7 @@ FRAMEWORK_VERSION = platform.get_package_version("framework-arduinoteensy")
 assert isdir(FRAMEWORK_DIR)
 
 BUILTIN_USB_FLAGS = (
+    "USB_AUDIO",
     "USB_HID",
     "USB_SERIAL_HID",
     "USB_DISK",
