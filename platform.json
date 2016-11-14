@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "1.2.1",
+  "version": "1.2.2",
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "https://sourceforge.net/projects/platformio-storage/files/packages/manifest.json/download",
@@ -53,7 +53,7 @@
     "tool-teensy": {
       "type": "uploader",
       "optional": true,
-      "version": ">=1.1.0"
+      "version": "~1.3.0"
     }
   }
 }

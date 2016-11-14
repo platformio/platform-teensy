@@ -176,12 +176,10 @@ env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
 )
 
-
-if (isfile(
+if isfile(
         join(
             platform.get_package_dir("tool-teensy") or "",
-            "teensy_loader_cli")) and
-        env.BoardConfig().id_ not in ("teensy35", "teensy36")):
+            "teensy_loader_cli")):
     env.Append(
         UPLOADER="teensy_loader_cli",
         UPLOADERFLAGS=[
@@ -196,12 +194,10 @@ else:
         REBOOTER="teensy_reboot",
         UPLOADER="teensy_post_compile",
         UPLOADERFLAGS=[
-            "-file=firmware",
-            '-path="$BUILD_DIR"',
+            "-file=firmware", '-path="$BUILD_DIR"',
             '-tools="%s"' % (platform.get_package_dir("tool-teensy") or "")
         ],
-        UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS'
-    )
+        UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS')
 
 #
 # Target: Build executable and linkable firmware
@@ -215,7 +211,7 @@ else:
     target_firm = env.ElfToHex(join("$BUILD_DIR", "firmware"), target_elf)
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
-target_buildprog = env.Alias("buildprog", target_firm)
+target_buildprog = env.Alias("buildprog", target_firm, target_firm)
 
 #
 # Target: Print binary size
