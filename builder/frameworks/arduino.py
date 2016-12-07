@@ -50,8 +50,8 @@ if not any(f in env.get("BUILD_FLAGS", []) for f in BUILTIN_USB_FLAGS):
 
 env.Append(
     CPPDEFINES=[
-        "ARDUINO=10600",
-        "TEENSYDUINO=%s" % FRAMEWORK_VERSION.split(".")[1]
+        ("ARDUINO", 10610),
+        ("TEENSYDUINO", FRAMEWORK_VERSION.split(".")[1])
     ],
 
     CPPPATH=[
