@@ -176,10 +176,12 @@ env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
 )
 
-if isfile(
-        join(
-            platform.get_package_dir("tool-teensy") or "",
-            "teensy_loader_cli")):
+if any([
+        isfile(
+            join(
+                platform.get_package_dir("tool-teensy") or "",
+                "teensy_loader_cli%s" % b)) for b in ("", ".exe")
+]):
     env.Append(
         UPLOADER="teensy_loader_cli",
         UPLOADERFLAGS=[
