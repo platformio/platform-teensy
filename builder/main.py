@@ -194,8 +194,8 @@ else:
         REBOOTER="teensy_reboot",
         UPLOADER="teensy_post_compile",
         UPLOADERFLAGS=[
-            "-file=firmware", '-path="$BUILD_DIR"',
-            '-tools="%s"' % (platform.get_package_dir("tool-teensy") or "")
+            "-file=firmware", '-path=$BUILD_DIR',
+            '-tools=%s' % (platform.get_package_dir("tool-teensy") or "")
         ],
         UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS')
 
