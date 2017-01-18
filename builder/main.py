@@ -176,10 +176,12 @@ env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
 )
 
-if isfile(
-        join(
-            platform.get_package_dir("tool-teensy") or "",
-            "teensy_loader_cli")):
+if any([
+        isfile(
+            join(
+                platform.get_package_dir("tool-teensy") or "",
+                "teensy_loader_cli%s" % b)) for b in ("", ".exe")
+]):
     env.Append(
         UPLOADER="teensy_loader_cli",
         UPLOADERFLAGS=[
@@ -194,8 +196,8 @@ else:
         REBOOTER="teensy_reboot",
         UPLOADER="teensy_post_compile",
         UPLOADERFLAGS=[
-            "-file=firmware", '-path="$BUILD_DIR"',
-            '-tools="%s"' % (platform.get_package_dir("tool-teensy") or "")
+            "-file=firmware", '-path=$BUILD_DIR',
+            '-tools=%s' % (platform.get_package_dir("tool-teensy") or "")
         ],
         UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS')
 
