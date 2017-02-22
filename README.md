@@ -9,7 +9,7 @@ Teensy is a complete USB-based microcontroller development system, in a very sma
 
 # Usage
 
-1. [Install PlatformIO Core](http://docs.platformio.org/en/latest/core.html)
+1. [Install PlatformIO Core](http://docs.platformio.org/page/core.html)
 2. Install Teensy development platform:
 ```bash
 # install the latest stable version
