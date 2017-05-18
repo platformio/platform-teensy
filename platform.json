@@ -47,7 +47,7 @@
     "framework-mbed": {
       "type": "framework",
       "optional": true,
-      "version": "~3.137.0"
+      "version": "~3.142.0"
     },
     "tool-teensy": {
       "type": "uploader",
