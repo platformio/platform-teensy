@@ -137,9 +137,10 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "--specs=nano.specs"
         ],
         LIBS=[
-            "c", "gcc", "arm_cortex%sl_math" %
+            "c", "gcc", "arm_cortex%sl%s_math" %
             ("M4" if env.BoardConfig().get(
-                "build.cpu") == "cortex-m4" else "M0")
+                "build.cpu") == "cortex-m4" else "M0", 
+             "f" if (env.BoardConfig().get("name") == "Teensy 3.6") or (env.BoardConfig().get("name") == "Teensy 3.5") else "")
         ],
         BUILDERS=dict(
             ElfToBin=Builder(
