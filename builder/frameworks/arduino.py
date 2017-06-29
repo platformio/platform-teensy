@@ -45,7 +45,7 @@ BUILTIN_USB_FLAGS = (
     "USB_FLIGHTSIM",
     "USB_DISABLED"
 )
-if not any(f in env.get("CPPDEFINES", "") for f in BUILTIN_USB_FLAGS):
+if not set(env.get("CPPDEFINES", [])) & set(BUILTIN_USB_FLAGS):
     env.Append(CPPDEFINES=["USB_SERIAL"])
 
 env.Append(
