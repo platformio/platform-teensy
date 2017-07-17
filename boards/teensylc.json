@@ -2,7 +2,7 @@
   "build": {
     "core": "teensy3", 
     "cpu": "cortex-m0plus", 
-    "extra_flags": "-D__MKL26Z64__ -DTEENSYLC -larm_cortexM0l_math", 
+    "extra_flags": "-D__MKL26Z64__ -DTEENSYLC", 
     "f_cpu": "48000000L", 
     "ldscript": "mkl26z64.ld", 
     "mcu": "mkl26z64"
