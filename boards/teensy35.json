@@ -7,6 +7,9 @@
     "ldscript": "mk64fx512.ld",
     "mcu": "mk64fx512"
   },
+  "connectivity": [
+    "can"
+  ],
   "frameworks": [
     "arduino"
   ],

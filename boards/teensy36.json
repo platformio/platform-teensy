@@ -7,6 +7,9 @@
     "ldscript": "mk66fx1m0.ld",
     "mcu": "mk66fx1m0"
   },
+  "connectivity": [
+    "can"
+  ],
   "frameworks": [
     "arduino"
   ],
