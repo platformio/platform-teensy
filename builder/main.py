@@ -21,7 +21,7 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 
 env.Replace(
-    ARFLAGS=["rcs"],
+    ARFLAGS=["rc"],
 
     ASFLAGS=["-x", "assembler-with-cpp"],
 
@@ -111,16 +111,17 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
     )
 elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
     env.Replace(
-        AR="arm-none-eabi-ar",
+        AR="arm-none-eabi-%sar" % "gcc-"
+        if "arduino" in env.get("PIOFRAMEWORK", []) else "",
         AS="arm-none-eabi-as",
         CC="arm-none-eabi-gcc",
         CXX="arm-none-eabi-g++",
         GDB="arm-none-eabi-gdb",
         OBJCOPY="arm-none-eabi-objcopy",
-        RANLIB="arm-none-eabi-ranlib",
+        # RANLIB="arm-none-eabi-gcc-ranlib",
+        RANLIB="$AR",
         SIZETOOL="arm-none-eabi-size",
-        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES',
-    )
+        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES', )
     env.Append(
         CCFLAGS=[
             "-mthumb",
@@ -131,6 +132,7 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
         CXXFLAGS=[
             "-fno-rtti"
         ],
+        RANLIBFLAGS=["-s"],
         LINKFLAGS=[
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
