@@ -36,7 +36,7 @@
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optional": true,
-      "version": ">=1.40803.0,<1.40805.0"
+      "version": "~1.50401.0"
     },
     "framework-arduinoteensy": {
       "type": "framework",
