@@ -121,7 +121,8 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
         # RANLIB="arm-none-eabi-gcc-ranlib",
         RANLIB="$AR",
         SIZETOOL="arm-none-eabi-size",
-        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES', )
+        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES'
+    )
     env.Append(
         CCFLAGS=[
             "-mthumb",
