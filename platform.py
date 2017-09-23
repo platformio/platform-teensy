@@ -25,10 +25,10 @@ class TeensyPlatform(PlatformBase):
             else:
                 toolchain = "toolchain-gccarmnoneeabi"
             self.packages[toolchain]['optional'] = False
-        
+
         if "mbed" in variables.get("pioframework", []):
-                self.packages["toolchain-gccarmnoneeabi"][
-                    'version'] = ">=1.60301.0"
+            self.packages["toolchain-gccarmnoneeabi"][
+                'version'] = ">=1.60301.0"
 
         return PlatformBase.configure_default_packages(
             self, variables, targets)
