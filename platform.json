@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "2.5.1",
+  "version": "2.6.0",
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json"
@@ -46,7 +46,7 @@
     "framework-mbed": {
       "type": "framework",
       "optional": true,
-      "version": "~4.151.0"
+      "version": "~4.152.0"
     },
     "tool-teensy": {
       "type": "uploader",
