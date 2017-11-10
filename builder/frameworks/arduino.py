@@ -50,7 +50,7 @@ if not set(env.get("CPPDEFINES", [])) & set(BUILTIN_USB_FLAGS):
 
 env.Append(
     CPPDEFINES=[
-        ("ARDUINO", 10610),
+        ("ARDUINO", 10805),
         ("TEENSYDUINO", FRAMEWORK_VERSION.split(".")[1])
     ],
 

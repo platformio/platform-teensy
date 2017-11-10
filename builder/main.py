@@ -35,7 +35,6 @@ env.Replace(
 
     CXXFLAGS=[
         "-fno-exceptions",
-        "-std=gnu++0x",
         "-felide-constructors"
     ],
 
@@ -71,12 +70,15 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
         CCFLAGS=[
             "-mmcu=$BOARD_MCU"
         ],
+
         CXXFLAGS=[
-            "-fno-threadsafe-statics"
+            "-std=gnu++11"
         ],
+
         LINKFLAGS=[
             "-mmcu=$BOARD_MCU"
         ],
+
         BUILDERS=dict(
             ElfToEep=Builder(
                 action=env.VerboseAction(" ".join([
@@ -133,10 +135,16 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-nostdlib",
             "-fsingle-precision-constant"
         ],
+
         CXXFLAGS=[
-            "-fno-rtti"
+            "-fno-rtti",
+            "-std=gnu++14"
         ],
+
         RANLIBFLAGS=["-s"],
+
+        LIBS=["stdc++"],
+
         LINKFLAGS=[
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
@@ -144,6 +152,7 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-fsingle-precision-constant",
             "--specs=nano.specs"
         ],
+
         BUILDERS=dict(
             ElfToBin=Builder(
                 action=env.VerboseAction(" ".join([
@@ -155,6 +164,7 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
                 ]), "Building $TARGET"),
                 suffix=".bin"
             ),
+
             ElfToHex=Builder(
                 action=env.VerboseAction(" ".join([
                     "$OBJCOPY",
@@ -171,8 +181,15 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
     )
     if env.BoardConfig().id_ in ("teensy35", "teensy36"):
         env.Append(
-            LINKFLAGS=["-mfloat-abi=hard", "-mfpu=fpv4-sp-d16"],
-            CCFLAGS=["-mfloat-abi=hard", "-mfpu=fpv4-sp-d16"]
+            CCFLAGS=[
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16"
+            ],
+
+            LINKFLAGS=[
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16"
+            ]
         )
 
 env.Append(
