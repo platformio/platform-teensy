@@ -50,9 +50,12 @@ env.Replace(
 
     LIBS=["m"],
 
-    PROGNAME="firmware",
     PROGSUFFIX=".elf"
 )
+
+# Allow user to override via pre:script
+if env.get("PROGNAME", "program") == "program":
+    env.Replace(PROGNAME="firmware")
 
 if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
     env.Replace(
@@ -216,7 +219,7 @@ else:
         REBOOTER="teensy_reboot",
         UPLOADER="teensy_post_compile",
         UPLOADERFLAGS=[
-            "-file=firmware", '-path="$BUILD_DIR"',
+            "-file=${PROGNAME}", '-path="$BUILD_DIR"',
             '-tools=%s' % (platform.get_package_dir("tool-teensy") or "")
         ],
         UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS')
@@ -227,10 +230,10 @@ else:
 
 target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
-    target_firm = join("$BUILD_DIR", "firmware.hex")
+    target_firm = join("$BUILD_DIR", "${PROGNAME}.hex")
 else:
     target_elf = env.BuildProgram()
-    target_firm = env.ElfToHex(join("$BUILD_DIR", "firmware"), target_elf)
+    target_firm = env.ElfToHex(target_elf)
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
 target_buildprog = env.Alias("buildprog", target_firm, target_firm)
