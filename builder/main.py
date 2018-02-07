@@ -151,8 +151,7 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
             "-Wl,--defsym=__rtc_localtime=$UNIX_TIME",
-            "-fsingle-precision-constant",
-            "--specs=nano.specs"
+            "-fsingle-precision-constant"
         ],
 
         BUILDERS=dict(

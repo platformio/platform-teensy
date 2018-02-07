@@ -86,7 +86,7 @@ if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
     else:
         math_lib = math_lib % "M0l"
 
-    env.Append(LIBS=[math_lib])
+    env.Prepend(LIBS=[math_lib])
 
 # Teensy 2.x Core
 if env.BoardConfig().get("build.core") == "teensy":
