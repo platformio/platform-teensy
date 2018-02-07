@@ -11,42 +11,7 @@
     "can"
   ],
   "debug": {
-    "tools": {
-      "jlink": {
-        "server": [
-          {
-            "arguments": [
-              "-singlerun",
-              "-if", "SWD",
-              "-select", "USB",
-              "-device", "MK64FX512xxx12",
-              "-port", "2331"
-            ],
-            "executable": "JLinkGDBServerCL.exe",
-            "system": [
-              "windows",
-              "windows_amd64",
-              "windows_x86"
-            ]
-          },
-          {
-            "arguments": [
-              "-singlerun",
-              "-if", "SWD",
-              "-select", "USB",
-              "-device", "MK64FX512xxx12",
-              "-port", "2331"
-            ],
-            "executable": "JLinkGDBServer",
-            "system": [
-              "darwin_x86_64",
-              "linux_i686",
-              "linux_x86_64"
-            ]
-          }
-        ]
-      }
-    }
+    "jlink_device": "MK64FX512xxx12"
   },
   "frameworks": [
     "arduino"
@@ -54,7 +19,13 @@
   "name": "Teensy 3.5",
   "upload": {
     "maximum_ram_size": 196608,
-    "maximum_size": 524288
+    "maximum_size": 524288,
+    "protocols": [
+      "teensy-cli",
+      "teensy-gui",
+      "jlink"
+    ],
+    "protocol": "teensy-gui"
   },
   "url": "https://www.pjrc.com/store/teensy35.html",
   "vendor": "Teensy"

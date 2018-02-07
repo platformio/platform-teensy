@@ -1,20 +1,25 @@
 {
   "build": {
-    "core": "teensy3", 
-    "cpu": "cortex-m4", 
-    "extra_flags": "-D__MK20DX128__ -DTEENSY30", 
-    "f_cpu": "48000000L", 
-    "ldscript": "mk20dx128.ld", 
+    "core": "teensy3",
+    "cpu": "cortex-m4",
+    "extra_flags": "-D__MK20DX128__ -DTEENSY30",
+    "f_cpu": "48000000L",
+    "ldscript": "mk20dx128.ld",
     "mcu": "mk20dx128"
-  }, 
+  },
   "frameworks": [
     "arduino"
-  ], 
-  "name": "Teensy 3.0", 
+  ],
+  "name": "Teensy 3.0",
   "upload": {
-    "maximum_ram_size": 16384, 
-    "maximum_size": 131072
-  }, 
-  "url": "https://www.pjrc.com/store/teensy3.html", 
+    "maximum_ram_size": 16384,
+    "maximum_size": 131072,
+    "protocols": [
+      "teensy-cli",
+      "teensy-gui"
+    ],
+    "protocol": "teensy-gui"
+  },
+  "url": "https://www.pjrc.com/store/teensy3.html",
   "vendor": "Teensy"
 }
