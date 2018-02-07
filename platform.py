@@ -22,11 +22,11 @@ class TeensyPlatform(PlatformBase):
     def configure_default_packages(self, variables, targets):
         if variables.get("board"):
             board_config = self.board_config(variables.get("board"))
-            if board_config.get("build.core") == "teensy":
-                toolchain = "toolchain-atmelavr"
-            else:
-                toolchain = "toolchain-gccarmnoneeabi"
-            self.packages[toolchain]['optional'] = False
+            del_toolchain = "toolchain-gccarmnoneeabi"
+            if board_config.get("build.core") != "teensy":
+                del_toolchain = "toolchain-atmelavr"
+            if del_toolchain in self.packages:
+                del self.packages[del_toolchain]
 
         if "mbed" in variables.get("pioframework", []):
             self.packages["toolchain-gccarmnoneeabi"][
