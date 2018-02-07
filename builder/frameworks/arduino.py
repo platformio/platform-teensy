@@ -60,10 +60,6 @@ env.Append(
 
     LIBSOURCE_DIRS=[
         join(FRAMEWORK_DIR, "libraries")
-    ],
-
-    LINKFLAGS=[
-        "-u", "_printf_float"
     ]
 )
 
