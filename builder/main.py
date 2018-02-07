@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from os.path import isfile, join
+import sys
+from platform import system
+from os import makedirs
+from os.path import isdir, join
 
 from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
                           DefaultEnvironment)
@@ -26,7 +29,6 @@ env.Replace(
     ASFLAGS=["-x", "assembler-with-cpp"],
 
     CCFLAGS=[
-        "-g",  # include debugging info (so errors include line numbers)
         "-Os",  # optimize for size
         "-Wall",  # show warnings
         "-ffunction-sections",  # place each function in its own section
@@ -50,9 +52,12 @@ env.Replace(
 
     LIBS=["m"],
 
-    PROGNAME="firmware",
     PROGSUFFIX=".elf"
 )
+
+# Allow user to override via pre:script
+if env.get("PROGNAME", "program") == "program":
+    env.Replace(PROGNAME="firmware")
 
 if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
     env.Replace(
@@ -149,8 +154,7 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
             "-Wl,--defsym=__rtc_localtime=$UNIX_TIME",
-            "-fsingle-precision-constant",
-            "--specs=nano.specs"
+            "-fsingle-precision-constant"
         ],
 
         BUILDERS=dict(
@@ -196,41 +200,16 @@ env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
 )
 
-if any([
-        isfile(
-            join(
-                platform.get_package_dir("tool-teensy") or "",
-                "teensy_loader_cli%s" % b)) for b in ("", ".exe")
-]):
-    env.Append(
-        UPLOADER="teensy_loader_cli",
-        UPLOADERFLAGS=[
-            "-mmcu=$BOARD_MCU",
-            "-w",  # wait for device to apear
-            "-s",  # soft reboot if device not online
-            "-v"  # verbose output
-        ],
-        UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS $SOURCES')
-else:
-    env.Append(
-        REBOOTER="teensy_reboot",
-        UPLOADER="teensy_post_compile",
-        UPLOADERFLAGS=[
-            "-file=firmware", '-path="$BUILD_DIR"',
-            '-tools=%s' % (platform.get_package_dir("tool-teensy") or "")
-        ],
-        UPLOADHEXCMD='$UPLOADER $UPLOADERFLAGS')
-
 #
 # Target: Build executable and linkable firmware
 #
 
 target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
-    target_firm = join("$BUILD_DIR", "firmware.hex")
+    target_firm = join("$BUILD_DIR", "${PROGNAME}.hex")
 else:
     target_elf = env.BuildProgram()
-    target_firm = env.ElfToHex(join("$BUILD_DIR", "firmware"), target_elf)
+    target_firm = env.ElfToHex(join("$BUILD_DIR", "${PROGNAME}"), target_elf)
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
 target_buildprog = env.Alias("buildprog", target_firm, target_firm)
@@ -248,12 +227,70 @@ AlwaysBuild(target_size)
 # Target: Upload by default firmware file
 #
 
-target_upload = env.Alias(
-    "upload", target_firm,
-    [env.VerboseAction("$UPLOADHEXCMD", "Uploading $SOURCE")] +
-    ([env.VerboseAction("$REBOOTER", "Rebooting...")]
-     if "REBOOTER" in env else []))
-AlwaysBuild(target_upload)
+upload_protocol = env.subst("$UPLOAD_PROTOCOL")
+upload_actions = []
+
+if upload_protocol.startswith("jlink"):
+
+    def _jlink_cmd_script(env, source):
+        build_dir = env.subst("$BUILD_DIR")
+        if not isdir(build_dir):
+            makedirs(build_dir)
+        script_path = join(build_dir, "upload.jlink")
+        commands = ["h", "loadbin %s,0x0" % source, "r", "q"]
+        with open(script_path, "w") as fp:
+            fp.write("\n".join(commands))
+        return script_path
+
+    env.Replace(
+        __jlink_cmd_script=_jlink_cmd_script,
+        UPLOADER="JLink.exe" if system() == "Windows" else "JLinkExe",
+        UPLOADERFLAGS=[
+            "-device", env.BoardConfig().get("debug", {}).get("jlink_device"),
+            "-speed", "4000",
+            "-if", ("jtag" if upload_protocol == "jlink-jtag" else "swd"),
+            "-autoconnect", "1"
+        ],
+        UPLOADCMD="$UPLOADER $UPLOADERFLAGS -CommanderScript ${__jlink_cmd_script(__env__, SOURCE)}"
+    )
+    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+
+elif upload_protocol == "teensy-cli":
+    env.Replace(
+        UPLOADER="teensy_loader_cli",
+        UPLOADERFLAGS=[
+            "-mmcu=$BOARD_MCU",
+            "-w",  # wait for device to appear
+            "-s",  # soft reboot if device not online
+            "-v"  # verbose output
+        ],
+        UPLOADCMD="$UPLOADER $UPLOADERFLAGS $SOURCES"
+    )
+    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+
+elif upload_protocol == "teensy-gui":
+    env.Replace(
+        REBOOTER="teensy_reboot",
+        UPLOADER="teensy_post_compile",
+        UPLOADERFLAGS=[
+            "-file=${PROGNAME}", '-path="$BUILD_DIR"',
+            '-tools=%s' % (platform.get_package_dir("tool-teensy") or "")
+        ],
+        UPLOADCMD="$UPLOADER $UPLOADERFLAGS"
+    )
+    upload_actions = [
+        env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE"),
+        env.VerboseAction("$REBOOTER", "Rebooting...")
+    ]
+
+# custom upload tool
+elif "UPLOADCMD" in env:
+    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+
+else:
+    sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
+
+AlwaysBuild(env.Alias("upload", target_firm, upload_actions))
 
 #
 # Default targets

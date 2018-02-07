@@ -1,21 +1,30 @@
 {
   "build": {
-    "core": "teensy3", 
-    "cpu": "cortex-m4", 
-    "extra_flags": "-D__MK20DX256__ -DTEENSY31", 
-    "f_cpu": "72000000L", 
-    "ldscript": "mk20dx256.ld", 
+    "core": "teensy3",
+    "cpu": "cortex-m4",
+    "extra_flags": "-D__MK20DX256__ -DTEENSY31",
+    "f_cpu": "72000000L",
+    "ldscript": "mk20dx256.ld",
     "mcu": "mk20dx256"
-  }, 
+  },
+  "debug": {
+    "jlink_device": "MK20DX256xxx10"
+  },
   "frameworks": [
-    "arduino", 
+    "arduino",
     "mbed"
-  ], 
-  "name": "Teensy 3.1 / 3.2", 
+  ],
+  "name": "Teensy 3.1 / 3.2",
   "upload": {
-    "maximum_ram_size": 65536, 
-    "maximum_size": 262144
-  }, 
-  "url": "https://www.pjrc.com/store/teensy31.html", 
+    "maximum_ram_size": 65536,
+    "maximum_size": 262144,
+    "protocols": [
+      "teensy-cli",
+      "teensy-gui",
+      "jlink"
+    ],
+    "protocol": "teensy-gui"
+  },
+  "url": "https://www.pjrc.com/store/teensy31.html",
   "vendor": "Teensy"
 }

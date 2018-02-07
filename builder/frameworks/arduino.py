@@ -35,15 +35,27 @@ FRAMEWORK_VERSION = platform.get_package_version("framework-arduinoteensy")
 assert isdir(FRAMEWORK_DIR)
 
 BUILTIN_USB_FLAGS = (
-    "USB_AUDIO",
+    "USB_SERIAL",
+    "USB_KEYBOARDONLY",
+    "USB_TOUCHSCREEN",
+    "USB_HID_TOUCHSCREEN",
     "USB_HID",
     "USB_SERIAL_HID",
-    "USB_DISK",
-    "USB_DISK_SDFLASH",
     "USB_MIDI",
+    "USB_MIDI4",
+    "USB_MIDI16",
+    "USB_MIDI_SERIAL",
+    "USB_MIDI4_SERIAL",
+    "USB_MIDI16_SERIAL",
+    "USB_AUDIO",
+    "USB_MIDI_AUDIO_SERIAL",
+    "USB_MIDI16_AUDIO_SERIAL",
+    "USB_MTPDISK",
     "USB_RAWHID",
     "USB_FLIGHTSIM",
-    "USB_DISABLED"
+    "USB_FLIGHTSIM_JOYSTICK",
+    "USB_EVERYTHING",
+    "USB_DISABLED",
 )
 if not set(env.get("CPPDEFINES", [])) & set(BUILTIN_USB_FLAGS):
     env.Append(CPPDEFINES=["USB_SERIAL"])
@@ -51,7 +63,7 @@ if not set(env.get("CPPDEFINES", [])) & set(BUILTIN_USB_FLAGS):
 env.Append(
     CPPDEFINES=[
         ("ARDUINO", 10805),
-        ("TEENSYDUINO", FRAMEWORK_VERSION.split(".")[1])
+        ("TEENSYDUINO", int(FRAMEWORK_VERSION.split(".")[1]))
     ],
 
     CPPPATH=[
@@ -74,7 +86,7 @@ if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
     else:
         math_lib = math_lib % "M0l"
 
-    env.Append(LIBS=[math_lib])
+    env.Prepend(LIBS=[math_lib])
 
 # Teensy 2.x Core
 if env.BoardConfig().get("build.core") == "teensy":

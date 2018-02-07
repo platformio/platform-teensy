@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from platform import system
+
 from platformio.managers.platform import PlatformBase
 
 
@@ -20,11 +22,11 @@ class TeensyPlatform(PlatformBase):
     def configure_default_packages(self, variables, targets):
         if variables.get("board"):
             board_config = self.board_config(variables.get("board"))
-            if board_config.get("build.core") == "teensy":
-                toolchain = "toolchain-atmelavr"
-            else:
-                toolchain = "toolchain-gccarmnoneeabi"
-            self.packages[toolchain]['optional'] = False
+            del_toolchain = "toolchain-gccarmnoneeabi"
+            if board_config.get("build.core") != "teensy":
+                del_toolchain = "toolchain-atmelavr"
+            if del_toolchain in self.packages:
+                del self.packages[del_toolchain]
 
         if "mbed" in variables.get("pioframework", []):
             self.packages["toolchain-gccarmnoneeabi"][
@@ -32,3 +34,42 @@ class TeensyPlatform(PlatformBase):
 
         return PlatformBase.configure_default_packages(
             self, variables, targets)
+
+    def get_boards(self, id_=None):
+        result = PlatformBase.get_boards(self, id_)
+        if not result:
+            return result
+        if id_:
+            return self._add_default_debug_tools(result)
+        else:
+            for key, value in result.items():
+                result[key] = self._add_default_debug_tools(result[key])
+        return result
+
+    def _add_default_debug_tools(self, board):
+        debug = board.manifest.get("debug", {})
+        upload_protocols = board.manifest.get("upload", {}).get(
+            "protocols", [])
+        if "tools" not in debug:
+            debug['tools'] = {}
+
+        if "jlink" in upload_protocols and "jlink" not in debug['tools']:
+            assert debug.get("jlink_device"), (
+                "Missed J-Link Device ID for %s" % board.id)
+            debug['tools']['jlink'] = {
+                "server": {
+                    "arguments": [
+                        "-singlerun",
+                        "-if", "SWD",
+                        "-select", "USB",
+                        "-device", debug.get("jlink_device"),
+                        "-port", "2331"
+                    ],
+                    "executable": ("JLinkGDBServerCL.exe"
+                                   if system() == "Windows" else
+                                   "JLinkGDBServer")
+                }
+            }
+
+        board.manifest['debug'] = debug
+        return board
