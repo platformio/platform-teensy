@@ -51,7 +51,7 @@
     "tool-teensy": {
       "type": "uploader",
       "optional": true,
-      "version": "~1.21.0"
+      "version": "<2"
     }
   }
 }
