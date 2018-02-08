@@ -15,7 +15,7 @@
 import sys
 from platform import system
 from os import makedirs
-from os.path import isdir, join
+from os.path import isdir, isfile, join
 
 from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
                           DefaultEnvironment)
@@ -226,6 +226,14 @@ AlwaysBuild(target_size)
 #
 # Target: Upload by default firmware file
 #
+
+# Force Teensy CLI when Teensy App is not available (Linux ARM)
+if env.subst("$UPLOAD_PROTOCOL") == "teensy-gui" and not isfile(
+        join(
+            platform.get_package_dir("tool-teensy") or "",
+            "teensy_post_compile.exe"
+            if system() == "Windows" else "teensy_post_compile")):
+    env.Replace(UPLOAD_PROTOCOL="teensy-cli")
 
 upload_protocol = env.subst("$UPLOAD_PROTOCOL")
 upload_actions = []
