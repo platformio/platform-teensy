@@ -20,12 +20,12 @@
   "upload": {
     "maximum_ram_size": 262144,
     "maximum_size": 1048576,
+    "protocol": "teensy-gui",
     "protocols": [
       "teensy-cli",
       "teensy-gui",
       "jlink"
-    ],
-    "protocol": "teensy-gui"
+    ]
   },
   "url": "https://www.pjrc.com/store/teensy36.html",
   "vendor": "Teensy"
