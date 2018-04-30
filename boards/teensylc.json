@@ -8,7 +8,8 @@
     "mcu": "mkl26z64"
   },
   "debug": {
-    "jlink_device": "MKL26Z64xxx4"
+    "jlink_device": "MKL26Z64xxx4",
+    "svd_path": "MKL26Z4.svd"
   },
   "frameworks": [
     "arduino"
