@@ -11,7 +11,8 @@
     "can"
   ],
   "debug": {
-    "jlink_device": "MK66FX1M0xxx18"
+    "jlink_device": "MK66FX1M0xxx18",
+    "svd_path": "MK66F18.svd"
   },
   "frameworks": [
     "arduino"

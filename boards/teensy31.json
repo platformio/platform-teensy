@@ -8,7 +8,8 @@
     "mcu": "mk20dx256"
   },
   "debug": {
-    "jlink_device": "MK20DX256xxx10"
+    "jlink_device": "MK20DX256xxx10",
+    "svd_path": "MK20D5.svd"
   },
   "frameworks": [
     "arduino",
