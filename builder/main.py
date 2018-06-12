@@ -52,6 +52,10 @@ env.Replace(
 
     LIBS=["m"],
 
+    SIZEPROGREGEXP=r"^(?:\.text|\.data|\.rodata|\.text.align|\.ARM.exidx)\s+(\d+).*",
+    SIZEDATAREGEXP=r"^(?:\.data|\.bss|\.noinit)\s+(\d+).*",
+    SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
+
     PROGSUFFIX=".elf"
 )
 
@@ -265,6 +269,7 @@ if upload_protocol.startswith("jlink"):
 
 elif upload_protocol == "teensy-cli":
     env.Replace(
+        REBOOTER="teensy_reboot",
         UPLOADER="teensy_loader_cli",
         UPLOADERFLAGS=[
             "-mmcu=$BOARD_MCU",
@@ -274,7 +279,10 @@ elif upload_protocol == "teensy-cli":
         ],
         UPLOADCMD="$UPLOADER $UPLOADERFLAGS $SOURCES"
     )
-    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+    upload_actions = [
+        env.VerboseAction("$REBOOTER -s", "Rebooting..."),
+        env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
+    ]
 
 elif upload_protocol == "teensy-gui":
     env.Replace(
