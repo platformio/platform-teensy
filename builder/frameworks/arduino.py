@@ -75,6 +75,99 @@ env.Append(
     ]
 )
 
+if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
+    env.Append(
+        ASFLAGS=["-x", "assembler-with-cpp"],
+
+        CCFLAGS=[
+            "-Os",  # optimize for size
+            "-Wall",  # show warnings
+            "-ffunction-sections",  # place each function in its own section
+            "-fdata-sections",
+            "-mmcu=$BOARD_MCU"
+        ],
+
+        CXXFLAGS=[
+            "-fno-exceptions",
+            "-felide-constructors",
+            "-std=gnu++11"
+        ],
+
+        CPPDEFINES=[
+            ("F_CPU", "$BOARD_F_CPU"),
+            "LAYOUT_US_ENGLISH"
+        ],
+
+        LINKFLAGS=[
+            "-Os",
+            "-Wl,--gc-sections,--relax",
+            "-mmcu=$BOARD_MCU"
+        ],
+
+        LIBS=["m"]
+    )
+elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
+    env.Replace(
+        AR="arm-none-eabi-gcc-ar",
+        RANLIB="$AR"
+    )
+
+    env.Append(
+        ASFLAGS=["-x", "assembler-with-cpp"],
+
+        CCFLAGS=[
+            "-Os",  # optimize for size
+            "-Wall",  # show warnings
+            "-ffunction-sections",  # place each function in its own section
+            "-fdata-sections",
+            "-mthumb",
+            "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
+            "-nostdlib",
+            "-fsingle-precision-constant"
+        ],
+
+        CXXFLAGS=[
+            "-fno-exceptions",
+            "-felide-constructors",
+            "-fno-rtti",
+            "-std=gnu++14"
+        ],
+
+        CPPDEFINES=[
+            ("F_CPU", "$BOARD_F_CPU"),
+            "LAYOUT_US_ENGLISH"
+        ],
+
+        RANLIBFLAGS=["-s"],
+
+        LINKFLAGS=[
+            "-Os",
+            "-Wl,--gc-sections,--relax",
+            "-mthumb",
+            "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
+            "-Wl,--defsym=__rtc_localtime=$UNIX_TIME",
+            "-fsingle-precision-constant"
+        ],
+
+        LIBS=["m", "stdc++"]
+    )
+
+    if env.BoardConfig().id_ in ("teensy35", "teensy36"):
+        env.Append(
+            CCFLAGS=[
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16"
+            ],
+
+            LINKFLAGS=[
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16"
+            ]
+        )
+
+env.Append(
+    ASFLAGS=env.get("CCFLAGS", [])[:]
+)
 
 if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
     board = env.subst("$BOARD")
