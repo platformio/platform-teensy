@@ -26,32 +26,6 @@ platform = env.PioPlatform()
 env.Replace(
     ARFLAGS=["rc"],
 
-    ASFLAGS=["-x", "assembler-with-cpp"],
-
-    CCFLAGS=[
-        "-Os",  # optimize for size
-        "-Wall",  # show warnings
-        "-ffunction-sections",  # place each function in its own section
-        "-fdata-sections"
-    ],
-
-    CXXFLAGS=[
-        "-fno-exceptions",
-        "-felide-constructors"
-    ],
-
-    CPPDEFINES=[
-        ("F_CPU", "$BOARD_F_CPU"),
-        "LAYOUT_US_ENGLISH"
-    ],
-
-    LINKFLAGS=[
-        "-Os",
-        "-Wl,--gc-sections,--relax"
-    ],
-
-    LIBS=["m"],
-
     SIZEPROGREGEXP=r"^(?:\.text|\.data|\.rodata|\.text.align|\.ARM.exidx)\s+(\d+).*",
     SIZEDATAREGEXP=r"^(?:\.data|\.bss|\.noinit)\s+(\d+).*",
     SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
@@ -75,19 +49,8 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
         SIZETOOL="avr-size",
         SIZEPRINTCMD='$SIZETOOL --mcu=$BOARD_MCU -C -d $SOURCES'
     )
+
     env.Append(
-        CCFLAGS=[
-            "-mmcu=$BOARD_MCU"
-        ],
-
-        CXXFLAGS=[
-            "-std=gnu++11"
-        ],
-
-        LINKFLAGS=[
-            "-mmcu=$BOARD_MCU"
-        ],
-
         BUILDERS=dict(
             ElfToEep=Builder(
                 action=env.VerboseAction(" ".join([
@@ -120,6 +83,10 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
             )
         )
     )
+
+    if not env.get("PIOFRAMEWORK"):
+        env.SConscript("frameworks/_bare_avr.py")
+
 elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
     env.Replace(
         AR="arm-none-eabi-ar",
@@ -132,35 +99,8 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
         SIZETOOL="arm-none-eabi-size",
         SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES'
     )
-    if "arduino" in env.get("PIOFRAMEWORK", []):
-        env.Replace(
-            AR="arm-none-eabi-gcc-ar",
-            RANLIB="$AR"
-        )
+
     env.Append(
-        CCFLAGS=[
-            "-mthumb",
-            "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
-            "-nostdlib",
-            "-fsingle-precision-constant"
-        ],
-
-        CXXFLAGS=[
-            "-fno-rtti",
-            "-std=gnu++14"
-        ],
-
-        RANLIBFLAGS=["-s"],
-
-        LIBS=["stdc++"],
-
-        LINKFLAGS=[
-            "-mthumb",
-            "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
-            "-Wl,--defsym=__rtc_localtime=$UNIX_TIME",
-            "-fsingle-precision-constant"
-        ],
-
         BUILDERS=dict(
             ElfToBin=Builder(
                 action=env.VerboseAction(" ".join([
@@ -187,22 +127,9 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             )
         )
     )
-    if env.BoardConfig().id_ in ("teensy35", "teensy36"):
-        env.Append(
-            CCFLAGS=[
-                "-mfloat-abi=hard",
-                "-mfpu=fpv4-sp-d16"
-            ],
 
-            LINKFLAGS=[
-                "-mfloat-abi=hard",
-                "-mfpu=fpv4-sp-d16"
-            ]
-        )
-
-env.Append(
-    ASFLAGS=env.get("CCFLAGS", [])[:]
-)
+    if not env.get("PIOFRAMEWORK"):
+        env.SConscript("frameworks/_bare_arm.py")
 
 #
 # Target: Build executable and linkable firmware
@@ -263,7 +190,7 @@ if upload_protocol.startswith("jlink"):
             "-if", ("jtag" if upload_protocol == "jlink-jtag" else "swd"),
             "-autoconnect", "1"
         ],
-        UPLOADCMD="$UPLOADER $UPLOADERFLAGS -CommanderScript ${__jlink_cmd_script(__env__, SOURCE)}"
+        UPLOADCMD='$UPLOADER $UPLOADERFLAGS -CommanderScript "${__jlink_cmd_script(__env__, SOURCE)}"'
     )
     upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
 
