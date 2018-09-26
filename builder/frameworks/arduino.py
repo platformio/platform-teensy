@@ -130,7 +130,8 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-fno-exceptions",
             "-felide-constructors",
             "-fno-rtti",
-            "-std=gnu++14"
+            "-std=gnu++14",
+            "-Wno-error=narrowing"
         ],
 
         CPPDEFINES=[

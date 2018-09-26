@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "3.4.0",
+  "version": "3.5.0",
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json"
@@ -41,7 +41,7 @@
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
-      "version": "~1.141.0"
+      "version": "~1.144.0"
     },
     "framework-mbed": {
       "type": "framework",
