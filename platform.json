@@ -31,7 +31,7 @@
     "toolchain-atmelavr": {
       "type": "toolchain",
       "optional": false,
-      "version": "~1.40902.0"
+      "version": "~1.50400.0"
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
