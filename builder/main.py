@@ -22,6 +22,7 @@ from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
+board_config = env.BoardConfig()
 
 env.Replace(
     ARFLAGS=["rc"],
@@ -37,7 +38,7 @@ env.Replace(
 if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
 
-if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
+if "BOARD" in env and board_config.get("build.core") == "teensy":
     env.Replace(
         AR="avr-ar",
         AS="avr-as",
@@ -87,7 +88,7 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_avr.py")
 
-elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
+elif "BOARD" in env and board_config.get("build.core") == "teensy3":
     env.Replace(
         AR="arm-none-eabi-ar",
         AS="arm-none-eabi-as",
@@ -185,7 +186,7 @@ if upload_protocol.startswith("jlink"):
         __jlink_cmd_script=_jlink_cmd_script,
         UPLOADER="JLink.exe" if system() == "Windows" else "JLinkExe",
         UPLOADERFLAGS=[
-            "-device", env.BoardConfig().get("debug", {}).get("jlink_device"),
+            "-device", board_config.get("debug", {}).get("jlink_device"),
             "-speed", "4000",
             "-if", ("jtag" if upload_protocol == "jlink-jtag" else "swd"),
             "-autoconnect", "1"
@@ -213,18 +214,16 @@ elif upload_protocol == "teensy-cli":
 
 elif upload_protocol == "teensy-gui":
     env.Replace(
-        REBOOTER="teensy_reboot",
         UPLOADER="teensy_post_compile",
         UPLOADERFLAGS=[
             "-file=${PROGNAME}", '-path="$BUILD_DIR"',
-            '-tools=%s' % (platform.get_package_dir("tool-teensy") or "")
+            "-tools=%s" % (platform.get_package_dir("tool-teensy") or ""),
+            "-board=%s" % board_config.id.upper(),
+            "-reboot"
         ],
         UPLOADCMD="$UPLOADER $UPLOADERFLAGS"
     )
-    upload_actions = [
-        env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE"),
-        env.VerboseAction("$REBOOTER", "Rebooting...")
-    ]
+    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
 
 # custom upload tool
 elif "UPLOADCMD" in env:

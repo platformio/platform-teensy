@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "3.6.0",
+  "version": "3.7.0",
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json"
@@ -31,7 +31,7 @@
     "toolchain-atmelavr": {
       "type": "toolchain",
       "optional": false,
-      "version": "~1.40902.0"
+      "version": "~1.50400.0"
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
@@ -41,7 +41,7 @@
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
-      "version": "~1.144.0"
+      "version": "~1.145.0"
     },
     "framework-mbed": {
       "type": "framework",
