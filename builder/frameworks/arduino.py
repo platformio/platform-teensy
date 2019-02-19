@@ -212,20 +212,35 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             CCFLAGS=["-g", "-Og", "-flto", "-fno-fat-lto-objects"],
             LINKFLAGS=["-g", "-Og", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
-    elif "TEENSY_OPT_SMALLEST_CODE" in env['CPPDEFINES']:
-        env.Append(
-            CCFLAGS=["-Os", "--specs=nano.specs"],
-            LINKFLAGS=["-Os", "--specs=nano.specs"]
-        )
     elif "TEENSY_OPT_SMALLEST_CODE_LTO" in env['CPPDEFINES']:
         env.Append(
             CCFLAGS=["-Os", "--specs=nano.specs", "-flto", "-fno-fat-lto-objects"],
             LINKFLAGS=["-Os", "--specs=nano.specs", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
-    # TEENSY_OPT_FASTER
+    elif "TEENSY_OPT_FASTER" in env['CPPDEFINES']:
+        env.Append(
+            CCFLAGS=["-O2"],
+            LINKFLAGS=["-O2"]
+        )
+    elif "TEENSY_OPT_SMALLEST_CODE" in env['CPPDEFINES']:
+        env.Append(
+            CCFLAGS=["-Os", "--specs=nano.specs"],
+            LINKFLAGS=["-Os", "--specs=nano.specs"]
+        )
+    # default profiles
     else:
-        env.Append(CCFLAGS=["-O2"], LINKFLAGS=["-O2"])
-
+        # for Teensy LC => TEENSY_OPT_SMALLEST_CODE
+        if env.BoardConfig().id_ == "teensylc":
+            env.Append(
+                CCFLAGS=["-Os", "--specs=nano.specs"],
+                LINKFLAGS=["-Os", "--specs=nano.specs"]
+            )
+        # for others => TEENSY_OPT_FASTER
+        else:
+            env.Append(
+                CCFLAGS=["-O2"],
+                LINKFLAGS=["-O2"]
+            )
 
 env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
