@@ -30,7 +30,7 @@ class TeensyPlatform(PlatformBase):
 
         if "mbed" in variables.get("pioframework", []):
             self.packages["toolchain-gccarmnoneeabi"][
-                'version'] = ">=1.60301.0"
+                'version'] = ">=1.60301.0,<1.80000.0"
 
         # configure J-LINK tool
         jlink_conds = [
