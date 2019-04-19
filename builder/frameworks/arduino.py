@@ -22,6 +22,7 @@ kinds of creative coding, interactive objects, spaces or physical experiences.
 http://arduino.cc/en/Reference/HomePage
 """
 
+from io import open
 from os import listdir
 from os.path import isdir, isfile, join
 
@@ -270,14 +271,14 @@ if env.BoardConfig().get("build.core") == "teensy":
             continue
         content = None
         content_changed = False
-        with open(file_path) as fp:
+        with open(file_path, encoding="latin-1") as fp:
             content = fp.read()
             if '#include "../' in content:
                 content_changed = True
                 content = content.replace('#include "../', '#include "')
         if not content_changed:
             continue
-        with open(file_path, "w") as fp:
+        with open(file_path, "w", encoding="latin-1") as fp:
             fp.write(content)
 else:
     env.Prepend(LIBPATH=[join(FRAMEWORK_DIR, "cores", "teensy3")])
