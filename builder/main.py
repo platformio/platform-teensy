@@ -88,51 +88,7 @@ if "BOARD" in env and board_config.get("build.core") == "teensy":
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_avr.py")
 
-elif "BOARD" in env and board_config.get("build.core") == "teensy3":
-    env.Replace(
-        AR="arm-none-eabi-ar",
-        AS="arm-none-eabi-as",
-        CC="arm-none-eabi-gcc",
-        CXX="arm-none-eabi-g++",
-        GDB="arm-none-eabi-gdb",
-        OBJCOPY="arm-none-eabi-objcopy",
-        RANLIB="arm-none-eabi-gcc-ranlib",
-        SIZETOOL="arm-none-eabi-size",
-        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES'
-    )
-
-    env.Append(
-        BUILDERS=dict(
-            ElfToBin=Builder(
-                action=env.VerboseAction(" ".join([
-                    "$OBJCOPY",
-                    "-O",
-                    "binary",
-                    "$SOURCES",
-                    "$TARGET"
-                ]), "Building $TARGET"),
-                suffix=".bin"
-            ),
-
-            ElfToHex=Builder(
-                action=env.VerboseAction(" ".join([
-                    "$OBJCOPY",
-                    "-O",
-                    "ihex",
-                    "-R",
-                    ".eeprom",
-                    "$SOURCES",
-                    "$TARGET"
-                ]), "Building $TARGET"),
-                suffix=".hex"
-            )
-        )
-    )
-
-    if not env.get("PIOFRAMEWORK"):
-        env.SConscript("frameworks/_bare_arm.py")
-
-elif "BOARD" in env and board_config.get("build.core") == "teensy4":
+elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4"):
     env.Replace(
         AR="arm-none-eabi-ar",
         AS="arm-none-eabi-as",
