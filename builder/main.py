@@ -88,7 +88,7 @@ if "BOARD" in env and board_config.get("build.core") == "teensy":
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_avr.py")
 
-elif "BOARD" in env and board_config.get("build.core") == "teensy3":
+elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4"):
     env.Replace(
         AR="arm-none-eabi-ar",
         AS="arm-none-eabi-as",
