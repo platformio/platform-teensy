@@ -2,17 +2,16 @@
   "build": {
     "core": "teensy4",
     "cpu": "cortex-m7",
-    "extra_flags": "-D__IMXRT1052__ -DTEENSY40",
+    "extra_flags": "-D__IMXRT1062__ -DTEENSY40",
     "f_cpu": "600000000",
-    "ldscript": "imxrt1052.ld",
+    "ldscript": "imxrt1062.ld",
     "mcu": "imxrt1062"
   },
   "connectivity": [
     "can"
   ],
   "debug": {
-    "jlink_device": "MIMXRT1052xxxxB",
-    "svd_path": "MIMXRT1052.svd"
+    "jlink_device": "MIMXRT1062xxxxA"
   },
   "frameworks": [
     "arduino"
