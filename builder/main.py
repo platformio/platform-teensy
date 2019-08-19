@@ -88,7 +88,7 @@ if "BOARD" in env and board_config.get("build.core") == "teensy":
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_avr.py")
 
-elif "BOARD" in env and board_config.get("build.core") == "teensy3":
+elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4"):
     env.Replace(
         AR="arm-none-eabi-ar",
         AS="arm-none-eabi-as",
@@ -138,6 +138,7 @@ elif "BOARD" in env and board_config.get("build.core") == "teensy3":
 
 target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
+    target_elf = join("$BUILD_DIR", "${PROGNAME}.elf")
     target_firm = join("$BUILD_DIR", "${PROGNAME}.hex")
 else:
     target_elf = env.BuildProgram()

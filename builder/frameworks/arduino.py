@@ -33,6 +33,8 @@ platform = env.PioPlatform()
 
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoteensy")
 FRAMEWORK_VERSION = platform.get_package_version("framework-arduinoteensy")
+BUILD_CORE = env.BoardConfig().get("build.core")
+
 assert isdir(FRAMEWORK_DIR)
 
 BUILTIN_USB_FLAGS = (
@@ -61,6 +63,11 @@ BUILTIN_USB_FLAGS = (
 if not set(env.get("CPPDEFINES", [])) & set(BUILTIN_USB_FLAGS):
     env.Append(CPPDEFINES=["USB_SERIAL"])
 
+env.Replace(
+    SIZEPROGREGEXP=r"^(?:\.text|\.text\.progmem|\.text\.itcm|\.data)\s+([0-9]+).*",
+    SIZEDATAREGEXP=r"^(?:\.usbdescriptortable|\.dmabuffers|\.usbbuffers|\.data|\.bss|\.bss\.dma|\.noinit|\.text\.itcm)\s+([0-9]+).*"
+)
+
 env.Append(
     CPPDEFINES=[
         ("ARDUINO", 10805),
@@ -68,7 +75,7 @@ env.Append(
     ],
 
     CPPPATH=[
-        join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
+        join(FRAMEWORK_DIR, "cores", BUILD_CORE)
     ],
 
     LIBSOURCE_DIRS=[
@@ -76,7 +83,7 @@ env.Append(
     ]
 )
 
-if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
+if "BOARD" in env and BUILD_CORE == "teensy":
     env.Append(
         ASFLAGS=["-x", "assembler-with-cpp"],
 
@@ -91,7 +98,8 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
         CXXFLAGS=[
             "-fno-exceptions",
             "-felide-constructors",
-            "-std=gnu++11"
+            "-std=gnu++11",
+            "-fpermissive"
         ],
 
         CPPDEFINES=[
@@ -107,7 +115,7 @@ if "BOARD" in env and env.BoardConfig().get("build.core") == "teensy":
 
         LIBS=["m"]
     )
-elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
+elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
     env.Replace(
         AR="arm-none-eabi-gcc-ar",
         RANLIB="$AR"
@@ -131,7 +139,8 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
             "-felide-constructors",
             "-fno-rtti",
             "-std=gnu++14",
-            "-Wno-error=narrowing"
+            "-Wno-error=narrowing",
+            "-fpermissive"
         ],
 
         CPPDEFINES=[
@@ -152,16 +161,20 @@ elif "BOARD" in env and env.BoardConfig().get("build.core") == "teensy3":
         LIBS=["m", "stdc++"]
     )
 
-    if env.BoardConfig().id_ in ("teensy35", "teensy36"):
+    if env.BoardConfig().id_ in ("teensy35", "teensy36", "teensy40"):
+        fpv_version = "4-sp"
+        if env.BoardConfig().id_ == "teensy40":
+            fpv_version = "5"
+
         env.Append(
             CCFLAGS=[
                 "-mfloat-abi=hard",
-                "-mfpu=fpv4-sp-d16"
+                "-mfpu=fpv%s-d16" % fpv_version
             ],
 
             LINKFLAGS=[
                 "-mfloat-abi=hard",
-                "-mfpu=fpv4-sp-d16"
+                "-mfpu=fpv%s-d16" % fpv_version
             ]
         )
 
@@ -254,13 +267,15 @@ if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
         math_lib = math_lib % "M4lf"
     elif board in ("teensy30", "teensy31"):
         math_lib = math_lib % "M4l"
+    elif board == "teensy40":
+        math_lib = math_lib % "M7lfsp"
     else:
         math_lib = math_lib % "M0l"
 
     env.Prepend(LIBS=[math_lib])
 
 # Teensy 2.x Core
-if env.BoardConfig().get("build.core") == "teensy":
+if BUILD_CORE == "teensy":
     env.Append(CPPPATH=[join(FRAMEWORK_DIR, "cores")])
 
     # search relative includes in teensy directories
@@ -281,7 +296,7 @@ if env.BoardConfig().get("build.core") == "teensy":
         with open(file_path, "w", encoding="latin-1") as fp:
             fp.write(content)
 else:
-    env.Prepend(LIBPATH=[join(FRAMEWORK_DIR, "cores", "teensy3")])
+    env.Prepend(LIBPATH=[join(FRAMEWORK_DIR, "cores", BUILD_CORE)])
 
 #
 # Target: Build Core Library
@@ -303,7 +318,7 @@ if "build.variant" in env.BoardConfig():
 
 libs.append(env.BuildLibrary(
     join("$BUILD_DIR", "FrameworkArduino"),
-    join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
+    join(FRAMEWORK_DIR, "cores", BUILD_CORE)
 ))
 
 env.Prepend(LIBS=libs)
