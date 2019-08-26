@@ -71,7 +71,8 @@ env.Replace(
 env.Append(
     CPPDEFINES=[
         ("ARDUINO", 10805),
-        ("TEENSYDUINO", int(FRAMEWORK_VERSION.split(".")[1]))
+        ("TEENSYDUINO", int(FRAMEWORK_VERSION.split(".")[1])),
+        "CORE_TEENSY"
     ],
 
     CPPPATH=[
