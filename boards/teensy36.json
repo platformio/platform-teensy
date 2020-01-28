@@ -1,10 +1,12 @@
 {
   "build": {
+    "arduino": {
+      "ldscript": "mk66fx1m0.ld"
+    },
     "core": "teensy3",
     "cpu": "cortex-m4",
     "extra_flags": "-D__MK66FX1M0__ -DTEENSY36",
     "f_cpu": "180000000L",
-    "ldscript": "mk66fx1m0.ld",
     "mcu": "mk66fx1m0"
   },
   "connectivity": [

@@ -1,10 +1,12 @@
 {
   "build": {
+    "arduino": {
+      "ldscript": "mk64fx512.ld"
+    },
     "core": "teensy3",
     "cpu": "cortex-m4",
     "extra_flags": "-D__MK64FX512__ -DTEENSY35",
     "f_cpu": "120000000L",
-    "ldscript": "mk64fx512.ld",
     "mcu": "mk64fx512"
   },
   "connectivity": [
