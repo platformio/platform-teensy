@@ -1,10 +1,12 @@
 {
   "build": {
+    "arduino": {
+      "ldscript": "mk20dx128.ld"
+    },
     "core": "teensy3",
     "cpu": "cortex-m4",
     "extra_flags": "-D__MK20DX128__ -DTEENSY30",
     "f_cpu": "48000000L",
-    "ldscript": "mk20dx128.ld",
     "mcu": "mk20dx128"
   },
   "frameworks": [

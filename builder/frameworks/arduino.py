@@ -162,6 +162,9 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
         LIBS=["m", "stdc++"]
     )
 
+    if not env.BoardConfig().get("build.ldscript", ""):
+        env.Replace(LDSCRIPT_PATH=env.BoardConfig().get("build.arduino.ldscript", ""))
+
     if env.BoardConfig().id_ in ("teensy35", "teensy36", "teensy40"):
         fpv_version = "4-sp"
         if env.BoardConfig().id_ == "teensy40":
