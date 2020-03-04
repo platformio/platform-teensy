@@ -264,19 +264,19 @@ env.Append(
     ASFLAGS=env.get("CCFLAGS", [])[:]
 )
 
-# if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
-#     board = env.subst("$BOARD")
-#     math_lib = "arm_cortex%s_math"
-#     if board in ("teensy35", "teensy36"):
-#         math_lib = math_lib % "M4lf"
-#     elif board in ("teensy30", "teensy31"):
-#         math_lib = math_lib % "M4l"
-#     elif board == "teensy40":
-#         math_lib = math_lib % "M7lfsp"
-#     else:
-#         math_lib = math_lib % "M0l"
+if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
+    board = env.subst("$BOARD")
+    math_lib = "arm_cortex%s_math"
+    if board in ("teensy35", "teensy36"):
+        math_lib = math_lib % "M4lf"
+    elif board in ("teensy30", "teensy31"):
+        math_lib = math_lib % "M4l"
+    elif board == "teensy40":
+        math_lib = math_lib % "M7lfsp"
+    else:
+        math_lib = math_lib % "M0l"
 
-#     env.Prepend(LIBS=[math_lib])
+    env.Prepend(LIBS=[math_lib])
 
 # Teensy 2.x Core
 if BUILD_CORE == "teensy":

@@ -5,7 +5,7 @@
     },
     "core": "teensy3",
     "cpu": "cortex-m0plus",
-    "extra_flags": "-D__MKL26Z64__ -DTEENSYLC",
+    "extra_flags": "-D__MKL26Z64__ -DARDUINO_TEENSYLC",
     "f_cpu": "48000000L",
     "mcu": "mkl26z64"
   },

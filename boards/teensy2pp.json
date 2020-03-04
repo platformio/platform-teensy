@@ -1,7 +1,7 @@
 {
   "build": {
     "core": "teensy",
-    "extra_flags": "-DTEENSY2PP",
+    "extra_flags": "-DARDUINO_TEENSY2PP",
     "f_cpu": "16000000L",
     "mcu": "at90usb1286"
   },

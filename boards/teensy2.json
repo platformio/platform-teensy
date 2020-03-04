@@ -1,7 +1,7 @@
 {
   "build": {
     "core": "teensy",
-    "extra_flags": "-DARDUINO_ARCH_AVR -DTEENSY2",
+    "extra_flags": "-DARDUINO_ARCH_AVR -DARDUINO_TEENSY2",
     "f_cpu": "16000000L",
     "mcu": "atmega32u4"
   },
