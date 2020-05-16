@@ -41,7 +41,7 @@
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
-      "version": "~1.151.0"
+      "version": "~1.152.0"
     },
     "framework-mbed": {
       "type": "framework",
