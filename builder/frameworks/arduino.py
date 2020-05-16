@@ -165,9 +165,9 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
     if not env.BoardConfig().get("build.ldscript", ""):
         env.Replace(LDSCRIPT_PATH=env.BoardConfig().get("build.arduino.ldscript", ""))
 
-    if env.BoardConfig().id_ in ("teensy35", "teensy36", "teensy40"):
+    if env.BoardConfig().id_ in ("teensy35", "teensy36", "teensy40", "teensy41"):
         fpv_version = "4-sp"
-        if env.BoardConfig().id_ == "teensy40":
+        if env.BoardConfig().id_.startswith("teensy4"):
             fpv_version = "5"
 
         env.Append(
@@ -271,7 +271,7 @@ if "cortex-m" in env.BoardConfig().get("build.cpu", ""):
         math_lib = math_lib % "M4lf"
     elif board in ("teensy30", "teensy31"):
         math_lib = math_lib % "M4l"
-    elif board == "teensy40":
+    elif board.startswith("teensy4"):
         math_lib = math_lib % "M7lfsp"
     else:
         math_lib = math_lib % "M0l"
