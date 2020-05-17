@@ -21,7 +21,7 @@
   "name": "Teensy 4.1",
   "upload": {
     "maximum_ram_size": 524288,
-    "maximum_size": 1048576,
+    "maximum_size": 8126464,
     "protocol": "teensy-gui",
     "protocols": [
       "teensy-gui",
