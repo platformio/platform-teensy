@@ -1,0 +1,33 @@
+{
+  "build": {
+    "arduino": {
+      "ldscript": "imxrt1062_t41.ld"
+    },
+    "core": "teensy4",
+    "cpu": "cortex-m7",
+    "extra_flags": "-D__IMXRT1062__ -DARDUINO_TEENSY41",
+    "f_cpu": "600000000",
+    "mcu": "imxrt1062"
+  },
+  "connectivity": [
+    "can"
+  ],
+  "debug": {
+    "jlink_device": "MIMXRT1062xxxxA"
+  },
+  "frameworks": [
+    "arduino"
+  ],
+  "name": "Teensy 4.1",
+  "upload": {
+    "maximum_ram_size": 524288,
+    "maximum_size": 8126464,
+    "protocol": "teensy-gui",
+    "protocols": [
+      "teensy-gui",
+      "jlink"
+    ]
+  },
+  "url": "https://www.pjrc.com/store/teensy41.html",
+  "vendor": "Teensy"
+}
