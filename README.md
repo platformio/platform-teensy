@@ -1,6 +1,6 @@
 # Teensy: development platform for [PlatformIO](http://platformio.org)
-[![Build Status](https://travis-ci.org/platformio/platform-teensy.svg?branch=develop)](https://travis-ci.org/platformio/platform-teensy)
-[![Build status](https://ci.appveyor.com/api/projects/status/vb91x3g5xujtorf9/branch/develop?svg=true)](https://ci.appveyor.com/project/ivankravets/platform-teensy/branch/develop)
+
+[![Build Status](https://github.com/platformio/platform-teensy/workflows/Examples/badge.svg)](https://github.com/platformio/platform-teensy/actions)
 
 Teensy is a complete USB-based microcontroller development system, in a very small footprint, capable of implementing many types of projects. All programming is done via the USB port. No special programmer is needed, only a standard USB cable and a PC or Macintosh with a USB port.
 
