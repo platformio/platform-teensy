@@ -2,8 +2,7 @@
   "name": "teensy",
   "title": "Teensy",
   "description": "Teensy is a complete USB-based microcontroller development system, in a very small footprint, capable of implementing many types of projects. All programming is done via the USB port. No special programmer is needed, only a standard USB cable and a PC or Macintosh with a USB port.",
-  "url": "https://www.pjrc.com/teensy",
-  "homepage": "http://platformio.org/platforms/teensy",
+  "homepage": "https://www.pjrc.com/teensy",
   "license": "Apache-2.0",
   "engines": {
     "platformio": "<5"
@@ -12,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "4.9.0",
+  "version": "4.10.0",
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json"
@@ -41,7 +40,7 @@
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
-      "version": "~1.152.0"
+      "version": "~1.153.0"
     },
     "framework-mbed": {
       "type": "framework",
