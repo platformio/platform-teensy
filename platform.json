@@ -38,31 +38,37 @@
     "toolchain-atmelavr": {
       "type": "toolchain",
       "optional": false,
+      "owner": "platformio",
       "version": "~1.50400.0"
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optional": false,
+      "owner": "platformio",
       "version": "~1.50401.0"
     },
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
+      "owner": "platformio",
       "version": "~1.153.0"
     },
     "framework-mbed": {
       "type": "framework",
       "optional": true,
+      "owner": "platformio",
       "version": "~6.51504.0"
     },
     "tool-teensy": {
       "type": "uploader",
       "optional": true,
+      "owner": "platformio",
       "version": "<2"
     },
     "tool-jlink": {
       "type": "uploader",
       "optional": true,
+      "owner": "platformio",
       "version": "^1.63208.0"
     }
   }
