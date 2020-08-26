@@ -5,7 +5,7 @@
     },
     "core": "teensy3",
     "cpu": "cortex-m4",
-    "extra_flags": "-D__MK64FX512__ -DARDUINO_TEENSY35",
+    "extra_flags": "-D__MK64FX512__ -DARDUINO_TEENSY35 -llibc -lc",
     "f_cpu": "120000000L",
     "mcu": "mk64fx512"
   },

@@ -5,7 +5,7 @@
     },
     "core": "teensy3",
     "cpu": "cortex-m4",
-    "extra_flags": "-D__MK66FX1M0__ -DARDUINO_TEENSY36",
+    "extra_flags": "-D__MK66FX1M0__ -DARDUINO_TEENSY36 -llibc -lc",
     "f_cpu": "180000000L",
     "mcu": "mk66fx1m0"
   },
