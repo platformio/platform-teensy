@@ -4,18 +4,22 @@
   "description": "Teensy is a complete USB-based microcontroller development system, in a very small footprint, capable of implementing many types of projects. All programming is done via the USB port. No special programmer is needed, only a standard USB cable and a PC or Macintosh with a USB port.",
   "homepage": "https://www.pjrc.com/teensy",
   "license": "Apache-2.0",
+  "keywords": [
+      "dev-platform",
+      "ARM",
+      "AVR",
+      "Cortex-M",
+      "NXP Semiconductors",
+      "Microchip"
+  ],
   "engines": {
-    "platformio": "<5"
+    "platformio": "^5"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "4.11.0",
-  "packageRepositories": [
-    "https://dl.bintray.com/platformio/dl-packages/manifest.json",
-    "http://dl.platformio.org/packages/manifest.json"
-  ],
+  "version": "4.11.1",
   "frameworks": {
     "arduino": {
       "package": "framework-arduinoteensy",
@@ -30,31 +34,37 @@
     "toolchain-atmelavr": {
       "type": "toolchain",
       "optional": false,
+      "owner": "platformio",
       "version": "~1.50400.0"
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optional": false,
+      "owner": "platformio",
       "version": "~1.50401.0"
     },
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
+      "owner": "platformio",
       "version": "~1.153.0"
     },
     "framework-mbed": {
       "type": "framework",
       "optional": true,
+      "owner": "platformio",
       "version": "~6.51504.0"
     },
     "tool-teensy": {
       "type": "uploader",
       "optional": true,
+      "owner": "platformio",
       "version": "<2"
     },
     "tool-jlink": {
       "type": "uploader",
       "optional": true,
+      "owner": "platformio",
       "version": "^1.63208.0"
     }
   }
