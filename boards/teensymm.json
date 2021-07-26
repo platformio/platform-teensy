@@ -1,11 +1,11 @@
 {
   "build": {
     "arduino": {
-      "ldscript": "imxrt1062.ld"
+      "ldscript": "imxrt1062_mm.ld"
     },
     "core": "teensy4",
     "cpu": "cortex-m7",
-    "extra_flags": "-D__IMXRT1062__ -DARDUINO_TEENSY40",
+    "extra_flags": "-D__IMXRT1062__ -DARDUINO_TEENSY_MICROMOD",
     "f_cpu": "600000000",
     "mcu": "imxrt1062"
   },
@@ -18,10 +18,10 @@
   "frameworks": [
     "arduino"
   ],
-  "name": "Teensy 4.0",
+  "name": "SparkFun MicroMod Teensy",
   "upload": {
     "maximum_ram_size": 524288,
-    "maximum_size": 2031616,
+    "maximum_size": 8126464,
     "protocol": "teensy-gui",
     "protocols": [
       "teensy-cli",
@@ -29,6 +29,6 @@
       "jlink"
     ]
   },
-  "url": "https://www.pjrc.com/store/teensy40.html",
-  "vendor": "Teensy"
+  "url": "https://www.sparkfun.com/products/16402",
+  "vendor": "SparkFun"
 }

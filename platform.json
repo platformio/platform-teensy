@@ -19,7 +19,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "4.12.0",
+  "version": "4.13.0",
   "frameworks": {
     "arduino": {
       "package": "framework-arduinoteensy",
@@ -35,7 +35,8 @@
       "type": "toolchain",
       "optional": false,
       "owner": "platformio",
-      "version": "~1.50400.0"
+      "version": "~1.50400.0",
+      "optionalVersions": [">=1.60301.0,<1.80000.0"]
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
@@ -47,7 +48,7 @@
       "type": "framework",
       "optional": true,
       "owner": "platformio",
-      "version": "~1.153.0"
+      "version": "~1.154.0"
     },
     "framework-mbed": {
       "type": "framework",
