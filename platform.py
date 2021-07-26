@@ -93,9 +93,10 @@ class TeensyPlatform(PlatformBase):
 
     def configure_debug_options(self, initial_debug_options, ide_data):
         debug_options = copy.deepcopy(initial_debug_options)
-        server_executable = debug_options["server"]["executable"].lower()
         adapter_speed = initial_debug_options.get("speed")
         if adapter_speed:
+            server_options = debug_options.get("server") or {}
+            server_executable = server_options.get("executable", "").lower()
             if "jlink" in server_executable:
                 debug_options["server"]["arguments"].extend(
                     ["-speed", adapter_speed]
