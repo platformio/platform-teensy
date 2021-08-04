@@ -27,8 +27,8 @@ board_config = env.BoardConfig()
 env.Replace(
     ARFLAGS=["rc"],
 
-    SIZEPROGREGEXP=r"^(?:\.text|\.data|\.rodata|\.text.align|\.ARM.exidx)\s+(\d+).*",
-    SIZEDATAREGEXP=r"^(?:\.data|\.bss|\.noinit)\s+(\d+).*",
+    SIZEPROGREGEXP=r"^(?:\.text|\.text\.progmem|\.text\.itcm|\.data|\.text\.csf)\s+([0-9]+).*",
+    SIZEDATAREGEXP=r"^(?:\.usbdescriptortable|\.dmabuffers|\.usbbuffers|\.data|\.bss|\.noinit|\.text\.itcm|\.text\.itcm\.padding)\s+([0-9]+).*",
     SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
 
     PROGSUFFIX=".elf"
@@ -49,7 +49,7 @@ if "BOARD" in env and build_core == "teensy":
         OBJCOPY="avr-objcopy",
         RANLIB="avr-ranlib",
         SIZETOOL="avr-size",
-        SIZEPRINTCMD='$SIZETOOL --mcu=$BOARD_MCU -C -d $SOURCES'
+        SIZEPRINTCMD="$SIZETOOL --mcu=$BOARD_MCU -C -d $SOURCES"
     )
 
     env.Append(
@@ -99,7 +99,7 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
         OBJCOPY="arm-none-eabi-objcopy",
         RANLIB="arm-none-eabi-gcc-ranlib",
         SIZETOOL="arm-none-eabi-size",
-        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES'
+        SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES"
     )
 
     env.Append(
