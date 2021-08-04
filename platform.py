@@ -29,9 +29,12 @@ class TeensyPlatform(PlatformBase):
             if del_toolchain in self.packages:
                 del self.packages[del_toolchain]
 
-        if "mbed" in variables.get("pioframework", []):
+        frameworks = variables.get("pioframework", [])
+        if "mbed" in frameworks:
             self.packages["toolchain-gccarmnoneeabi"][
                 "version"] = ">=1.60301.0,<1.80000.0"
+        elif "arduino" in frameworks and board_config.get("build.core", "") == "teensy4":
+            self.packages["tool-teensy"]["optional"] = False
 
         # configure J-LINK tool
         jlink_conds = [
