@@ -38,7 +38,8 @@ env.Replace(
 if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
 
-if "BOARD" in env and board_config.get("build.core") == "teensy":
+build_core = board_config.get("build.core", "")
+if "BOARD" in env and build_core == "teensy":
     env.Replace(
         AR="avr-ar",
         AS="avr-as",
@@ -88,7 +89,7 @@ if "BOARD" in env and board_config.get("build.core") == "teensy":
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_avr.py")
 
-elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4"):
+elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
     env.Replace(
         AR="arm-none-eabi-ar",
         AS="arm-none-eabi-as",
@@ -143,6 +144,8 @@ if "nobuild" in COMMAND_LINE_TARGETS:
 else:
     target_elf = env.BuildProgram()
     target_firm = env.ElfToHex(join("$BUILD_DIR", "${PROGNAME}"), target_elf)
+    if "arduino" in env.subst("$PIOFRAMEWORK") and build_core == "teensy4":
+        env.AddPostAction("checkprogsize", "teensy_size $SOURCES")
     env.Depends(target_firm, "checkprogsize")
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
