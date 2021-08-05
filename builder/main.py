@@ -24,19 +24,14 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 board_config = env.BoardConfig()
 
-env.Replace(
-    ARFLAGS=["rc"],
-
-    SIZEPROGREGEXP=r"^(?:\.text|\.text\.progmem|\.text\.itcm|\.data|\.text\.csf)\s+([0-9]+).*",
-    SIZEDATAREGEXP=r"^(?:\.usbdescriptortable|\.dmabuffers|\.usbbuffers|\.data|\.bss|\.noinit|\.text\.itcm|\.text\.itcm\.padding)\s+([0-9]+).*",
-    SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
-
-    PROGSUFFIX=".elf"
-)
-
 # Allow user to override via pre:script
 if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
+
+env.Replace(
+    ARFLAGS=["rc"],
+    PROGSUFFIX=".elf"
+)
 
 build_core = board_config.get("build.core", "")
 if "BOARD" in env and build_core == "teensy":
@@ -133,6 +128,21 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_arm.py")
 
+# Default GCC's size tool
+env.Replace(
+    SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
+    SIZEPROGREGEXP=r"^(?:\.text|\.text\.progmem|\.text\.itcm|\.data|\.text\.csf)\s+([0-9]+).*",
+    SIZEDATAREGEXP=r"^(?:\.usbdescriptortable|\.dmabuffers|\.usbbuffers|\.data|\.bss|\.noinit|\.text\.itcm|\.text\.itcm\.padding)\s+([0-9]+).*",
+)
+
+# Disable memory calculation and print output from custom "teensy_size" tool
+if "arduino" in env.subst("$PIOFRAMEWORK") and build_core == "teensy4":
+    env.Replace(
+        SIZETOOL=None,
+        SIZECHECKCMD=None,
+        SIZEPRINTCMD="teensy_size $SOURCES",
+    )
+
 #
 # Target: Build executable and linkable firmware
 #
@@ -144,8 +154,6 @@ if "nobuild" in COMMAND_LINE_TARGETS:
 else:
     target_elf = env.BuildProgram()
     target_firm = env.ElfToHex(join("$BUILD_DIR", "${PROGNAME}"), target_elf)
-    if "arduino" in env.subst("$PIOFRAMEWORK") and build_core == "teensy4":
-        env.AddPostAction("checkprogsize", "teensy_size $SOURCES")
     env.Depends(target_firm, "checkprogsize")
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
