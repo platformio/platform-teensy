@@ -24,21 +24,17 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 board_config = env.BoardConfig()
 
-env.Replace(
-    ARFLAGS=["rc"],
-
-    SIZEPROGREGEXP=r"^(?:\.text|\.data|\.rodata|\.text.align|\.ARM.exidx)\s+(\d+).*",
-    SIZEDATAREGEXP=r"^(?:\.data|\.bss|\.noinit)\s+(\d+).*",
-    SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
-
-    PROGSUFFIX=".elf"
-)
-
 # Allow user to override via pre:script
 if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
 
-if "BOARD" in env and board_config.get("build.core") == "teensy":
+env.Replace(
+    ARFLAGS=["rc"],
+    PROGSUFFIX=".elf"
+)
+
+build_core = board_config.get("build.core", "")
+if "BOARD" in env and build_core == "teensy":
     env.Replace(
         AR="avr-ar",
         AS="avr-as",
@@ -48,7 +44,7 @@ if "BOARD" in env and board_config.get("build.core") == "teensy":
         OBJCOPY="avr-objcopy",
         RANLIB="avr-ranlib",
         SIZETOOL="avr-size",
-        SIZEPRINTCMD='$SIZETOOL --mcu=$BOARD_MCU -C -d $SOURCES'
+        SIZEPRINTCMD="$SIZETOOL --mcu=$BOARD_MCU -C -d $SOURCES"
     )
 
     env.Append(
@@ -88,7 +84,7 @@ if "BOARD" in env and board_config.get("build.core") == "teensy":
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_avr.py")
 
-elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4"):
+elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
     env.Replace(
         AR="arm-none-eabi-ar",
         AS="arm-none-eabi-as",
@@ -98,7 +94,7 @@ elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4")
         OBJCOPY="arm-none-eabi-objcopy",
         RANLIB="arm-none-eabi-gcc-ranlib",
         SIZETOOL="arm-none-eabi-size",
-        SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES'
+        SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES"
     )
 
     env.Append(
@@ -131,6 +127,21 @@ elif "BOARD" in env and board_config.get("build.core") in ("teensy3", "teensy4")
 
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_arm.py")
+
+# Default GCC's size tool
+env.Replace(
+    SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
+    SIZEPROGREGEXP=r"^(?:\.text|\.text\.progmem|\.text\.itcm|\.data|\.text\.csf)\s+([0-9]+).*",
+    SIZEDATAREGEXP=r"^(?:\.usbdescriptortable|\.dmabuffers|\.usbbuffers|\.data|\.bss|\.noinit|\.text\.itcm|\.text\.itcm\.padding)\s+([0-9]+).*",
+)
+
+# Disable memory calculation and print output from custom "teensy_size" tool
+if "arduino" in env.subst("$PIOFRAMEWORK") and build_core == "teensy4":
+    env.Replace(
+        SIZETOOL=None,
+        SIZECHECKCMD=None,
+        SIZEPRINTCMD="teensy_size $SOURCES",
+    )
 
 #
 # Target: Build executable and linkable firmware
