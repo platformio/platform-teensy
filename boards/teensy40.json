@@ -20,7 +20,7 @@
   },
   "frameworks": [
     "arduino",
-	  "zephyr"
+    "zephyr"
   ],
   "name": "Teensy 4.0",
   "upload": {
