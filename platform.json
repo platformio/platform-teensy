@@ -72,12 +72,6 @@
       "owner": "platformio",
       "version": "<2"
     },
-    "tool-pyocd": {
-      "type": "debugger",
-      "optional": true,
-      "owner": "platformio",
-      "version": "~1.2900.0"
-    },
     "tool-jlink": {
       "type": "uploader",
       "optional": true,
