@@ -40,8 +40,7 @@ class TeensyPlatform(PlatformBase):
                     self.packages[p]["optional"] = False
             if "windows" not in get_systype():
                 self.packages["tool-gperf"]["optional"] = False
-            self.packages["toolchain-gccarmnoneeabi"][
-                "version"] = ">=1.60301.0,<1.80000.0"
+            self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.80201.0"
         elif "arduino" in frameworks and board_config.get("build.core", "") == "teensy4":
             self.packages["tool-teensy"]["optional"] = False
 
