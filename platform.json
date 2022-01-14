@@ -28,6 +28,10 @@
     "mbed": {
       "package": "framework-mbed",
       "script": "builder/frameworks/mbed.py"
+    },
+    "zephyr": {
+      "package": "framework-zephyr",
+      "script": "builder/frameworks/zephyr.py"
     }
   },
   "packages": {
@@ -56,6 +60,12 @@
       "owner": "platformio",
       "version": "~6.51506.0"
     },
+    "framework-zephyr": {
+      "type": "framework",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~2.20701.0"
+    },
     "tool-teensy": {
       "type": "uploader",
       "optional": true,
@@ -67,6 +77,26 @@
       "optional": true,
       "owner": "platformio",
       "version": "^1.63208.0"
+    },
+    "tool-cmake": {
+      "optional": true,
+      "owner": "platformio",
+      "version": "~3.21.0"
+    },
+    "tool-dtc": {
+      "optional": true,
+      "owner": "platformio",
+      "version": "~1.4.7"
+    },
+    "tool-ninja": {
+      "optional": true,
+      "owner": "platformio",
+      "version": "^1.7.0"
+    },
+    "tool-gperf": {
+      "optional": true,
+      "owner": "platformio",
+      "version": "^3.0.0"
     }
   }
 }

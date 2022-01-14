@@ -7,7 +7,10 @@
     "cpu": "cortex-m7",
     "extra_flags": "-D__IMXRT1062__ -DARDUINO_TEENSY40",
     "f_cpu": "600000000",
-    "mcu": "imxrt1062"
+    "mcu": "imxrt1062",
+    "zephyr": {
+        "variant": "teensy40"
+    }
   },
   "connectivity": [
     "can"
@@ -16,7 +19,8 @@
     "jlink_device": "MIMXRT1062xxxxA"
   },
   "frameworks": [
-    "arduino"
+    "arduino",
+    "zephyr"
   ],
   "name": "Teensy 4.0",
   "upload": {
