@@ -16,6 +16,7 @@ import copy
 import platform
 
 from platformio.managers.platform import PlatformBase
+from platformio.util import get_systype
 
 
 class TeensyPlatform(PlatformBase):
@@ -33,6 +34,13 @@ class TeensyPlatform(PlatformBase):
         if "mbed" in frameworks:
             self.packages["toolchain-gccarmnoneeabi"][
                 "version"] = ">=1.60301.0,<1.80000.0"
+        elif "zephyr" in frameworks:
+            for p in self.packages:
+                if p in ("tool-cmake", "tool-dtc", "tool-ninja"):
+                    self.packages[p]["optional"] = False
+            if "windows" not in get_systype():
+                self.packages["tool-gperf"]["optional"] = False
+            self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.80201.0"
         elif "arduino" in frameworks and board_config.get("build.core", "") == "teensy4":
             self.packages["tool-teensy"]["optional"] = False
 

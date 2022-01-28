@@ -16,6 +16,8 @@ jobs:
           - "examples/mbed-blink"
           - "examples/mbed-dsp"
           - "examples/mbed-serial"
+          - "examples/zephyr-blink"
+          - "examples/zephyr-synchronization"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2

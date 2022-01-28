@@ -1,4 +1,4 @@
-..  Copyright 2014-present PlatformIO <contact@platformio.org>
+..  Copyright 2020-present PlatformIO <contact@platformio.org>
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -12,21 +12,21 @@
 How to build PlatformIO based project
 =====================================
 
-1. `Install PlatformIO Core <http://docs.platformio.org/page/core.html>`_
-2. Download `development platform with examples <https://github.com/platformio/platform-teensy/archive/develop.zip>`_
+1. [Install PlatformIO Core](http://docs.platformio.org/page/core.html)
+2. Download [development platform with examples](https://github.com/platformio/platform-teensy/archive/develop.zip)
 3. Extract ZIP archive
 4. Run these commands:
 
-.. code-block:: bash
+```shell
+# Change directory to example
+$ cd platform-teensy/examples/zephyr-synchronization
 
-    # Change directory to example
-    > cd platform-teensy/examples/mbed-blink
+# Build project
+$ pio run
 
-    # Build project
-    > platformio run
+# Upload firmware
+$ pio run --target upload
 
-    # Upload firmware
-    > platformio run --target upload
-
-    # Clean build files
-    > platformio run --target clean
+# Clean build files
+$ pio run --target clean
+```
