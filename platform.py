@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import copy
 import sys
 
 from platformio.public import PlatformBase
 
 
 IS_WINDOWS = sys.platform.startswith("win")
+
 
 class TeensyPlatform(PlatformBase):
 
@@ -102,15 +102,9 @@ class TeensyPlatform(PlatformBase):
         board.manifest["debug"] = debug
         return board
 
-    def configure_debug_options(self, initial_debug_options, ide_data):
-        debug_options = copy.deepcopy(initial_debug_options)
-        adapter_speed = initial_debug_options.get("speed")
-        if adapter_speed:
-            server_options = debug_options.get("server") or {}
-            server_executable = server_options.get("executable", "").lower()
-            if "jlink" in server_executable:
-                debug_options["server"]["arguments"].extend(
-                    ["-speed", adapter_speed]
+    def configure_debug_session(self, debug_config):
+        if debug_config.speed:
+            if "jlink" in (debug_config.server or {}).get("executable", "").lower():
+                debug_config.server["arguments"].extend(
+                    ["-speed", debug_config.speed]
                 )
-
-        return debug_options
