@@ -20,15 +20,20 @@ from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
 
-env.Append(
-    ASFLAGS=["-x", "assembler-with-cpp"],
+machine_flags = [
+    "-mmcu=$BOARD_MCU"
+]
 
-    CCFLAGS=[
+env.Append(
+    ASFLAGS=machine_flags,
+    ASPPFLAGS=[
+        "-x", "assembler-with-cpp",
+    ],
+    CCFLAGS=machine_flags + [
         "-Os",  # optimize for size
         "-Wall",  # show warnings
         "-ffunction-sections",  # place each function in its own section
         "-fdata-sections",
-        "-mmcu=$BOARD_MCU"
     ],
 
     CXXFLAGS=[
@@ -42,14 +47,10 @@ env.Append(
         "LAYOUT_US_ENGLISH"
     ],
 
-    LINKFLAGS=[
+    LINKFLAGS=machine_flags + [
         "-Os",
         "-Wl,--gc-sections,--relax",
-        "-mmcu=$BOARD_MCU"
     ],
 
     LIBS=["m"]
 )
-
-# copy CCFLAGS to ASFLAGS (-x assembler-with-cpp mode)
-env.Append(ASFLAGS=env.get("CCFLAGS", [])[:])

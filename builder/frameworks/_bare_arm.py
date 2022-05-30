@@ -21,7 +21,12 @@ from SCons.Script import DefaultEnvironment
 env = DefaultEnvironment()
 
 env.Append(
-    ASFLAGS=["-x", "assembler-with-cpp"],
+    ASFLAGS=[
+        "-mthumb",
+    ],
+    ASPPFLAGS=[
+        "-x", "assembler-with-cpp",
+    ],
 
     CCFLAGS=[
         "-Os",  # optimize for size
@@ -60,11 +65,14 @@ env.Append(
 
 if env.BoardConfig().id_ in ("teensy35", "teensy36"):
     env.Append(
+        ASFLAGS=[
+            "-mfloat-abi=hard",
+            "-mfpu=fpv4-sp-d16"
+        ],
         CCFLAGS=[
             "-mfloat-abi=hard",
             "-mfpu=fpv4-sp-d16"
         ],
-
         LINKFLAGS=[
             "-mfloat-abi=hard",
             "-mfpu=fpv4-sp-d16"
@@ -73,6 +81,9 @@ if env.BoardConfig().id_ in ("teensy35", "teensy36"):
 
 if "BOARD" in env:
     env.Append(
+        ASFLAGS=[
+            "-mcpu=%s" % env.BoardConfig().get("build.cpu")
+        ],
         CCFLAGS=[
             "-mcpu=%s" % env.BoardConfig().get("build.cpu")
         ],
@@ -80,6 +91,3 @@ if "BOARD" in env:
             "-mcpu=%s" % env.BoardConfig().get("build.cpu")
         ]
     )
-
-# copy CCFLAGS to ASFLAGS (-x assembler-with-cpp mode)
-env.Append(ASFLAGS=env.get("CCFLAGS", [])[:])
