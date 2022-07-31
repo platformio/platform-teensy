@@ -10,7 +10,13 @@
     "mcu": "imxrt1062",
     "zephyr": {
         "variant": "teensy40"
-    }
+    },
+    "hwids": [
+      [
+        "0x16C0",
+        "0x0483"
+      ]
+    ]    
   },
   "connectivity": [
     "can"
