@@ -61,6 +61,7 @@ BUILTIN_USB_FLAGS = (
     "USB_FLIGHTSIM_JOYSTICK",
     "USB_EVERYTHING",
     "USB_DISABLED",
+    "USB_MTPDISK_SERIAL"
 )
 if not set(env.get("CPPDEFINES", [])) & set(BUILTIN_USB_FLAGS):
     env.Append(CPPDEFINES=["USB_SERIAL"])
