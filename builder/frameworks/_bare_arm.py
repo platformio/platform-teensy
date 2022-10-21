@@ -35,7 +35,6 @@ env.Append(
         "-fdata-sections",
         "-mthumb",
         "-nostdlib",
-        "-fsingle-precision-constant"
     ],
 
     CXXFLAGS=[
@@ -56,13 +55,22 @@ env.Append(
         "-Os",
         "-Wl,--gc-sections,--relax",
         "-mthumb",
-        "-Wl,--defsym=__rtc_localtime=$UNIX_TIME",
-        "-fsingle-precision-constant"
+        "-Wl,--defsym=__rtc_localtime=$UNIX_TIME"
     ],
 
     LIBS=["m", "stdc++"]
 )
 
+if not env.BoardConfig().id_ in (
+    "teensy40",
+    "teensy41",
+    "teensymm",
+):
+    env.Append(
+        LINKFLAGS=["-fsingle-precision-constant"],
+        CCFLAGS=["-fsingle-precision-constant"]
+        )
+    
 if env.BoardConfig().id_ in ("teensy35", "teensy36"):
     env.Append(
         ASFLAGS=[

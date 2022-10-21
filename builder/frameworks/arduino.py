@@ -145,8 +145,7 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
             "-fdata-sections",
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
-            "-nostdlib",
-            "-fsingle-precision-constant"
+            "-nostdlib"
         ],
 
         CXXFLAGS=[
@@ -177,7 +176,14 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
 
     if not env.BoardConfig().get("build.ldscript", ""):
         env.Replace(LDSCRIPT_PATH=env.BoardConfig().get("build.arduino.ldscript", ""))
-
+        
+    if not env.BoardConfig().id_ in (
+        "teensy40",
+        "teensy41",
+        "teensymm",
+    ):
+        env.Append(CCFLAGS=["-fsingle-precision-constant"])
+        
     if env.BoardConfig().id_ in (
         "teensy35",
         "teensy36",
