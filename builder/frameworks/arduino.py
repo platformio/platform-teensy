@@ -145,8 +145,7 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
             "-fdata-sections",
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
-            "-nostdlib",
-            "-fsingle-precision-constant"
+            "-nostdlib"
         ],
 
         CXXFLAGS=[
