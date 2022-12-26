@@ -131,6 +131,11 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
     if build_core == "teensy4":
         # Get the key and default to an empty string
         custom_secure_key = env.GetProjectConfig().get("env:" + env["PIOENV"], "custom_secure_key", "")
+        if custom_secure_key:
+            encrypt_message = f"Encrypting $TARGET with key at {custom_secure_key}"
+        else:
+            encrypt_message = "Encrypting $TARGET with default key"
+
         env.Append(
             BUILDERS=dict(
                 HexToEhex=Builder(
@@ -140,7 +145,7 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
                         board_config.id.upper(),
                         "$SOURCES",
                         custom_secure_key
-                    ]), "Encrypting $TARGET"),
+                    ]), encrypt_message),
                     suffix=".ehex"
                 )
             )
