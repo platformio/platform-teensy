@@ -46,13 +46,13 @@
       "type": "toolchain",
       "optional": false,
       "owner": "platformio",
-      "version": "~1.50401.0"
+      "version": "~1.110301.0"
     },
     "framework-arduinoteensy": {
       "type": "framework",
       "optional": true,
       "owner": "platformio",
-      "version": "~1.157.0"
+      "version": "~1.158.0"
     },
     "framework-mbed": {
       "type": "framework",
