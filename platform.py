@@ -32,16 +32,18 @@ class TeensyPlatform(PlatformBase):
                 del self.packages[del_toolchain]
 
         frameworks = variables.get("pioframework", [])
-        if "mbed" in frameworks:
-            self.packages["toolchain-gccarmnoneeabi"][
-                "version"] = ">=1.60301.0,<1.80000.0"
-        elif "zephyr" in frameworks:
+        if "arduino" in frameworks:
+            self.packages.pop("toolchain-gccarmnoneeabi", None)
+        else:
+            self.packages["toolchain-gccarmnoneeabi"]["optional"] = False
+            self.packages.pop("toolchain-gccarmnoneeabi-teensy", None)
+
+        if "zephyr" in frameworks:
             for p in self.packages:
                 if p in ("tool-cmake", "tool-dtc", "tool-ninja"):
                     self.packages[p]["optional"] = False
             if not IS_WINDOWS:
                 self.packages["tool-gperf"]["optional"] = False
-            self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.80201.0"
         elif "arduino" in frameworks and board_config.get("build.core", "") == "teensy4":
             self.packages["tool-teensy"]["optional"] = False
 

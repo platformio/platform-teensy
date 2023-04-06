@@ -34,8 +34,7 @@ env.Append(
         "-ffunction-sections",  # place each function in its own section
         "-fdata-sections",
         "-mthumb",
-        "-nostdlib",
-        "-fsingle-precision-constant"
+        "-nostdlib"
     ],
 
     CXXFLAGS=[
@@ -56,8 +55,7 @@ env.Append(
         "-Os",
         "-Wl,--gc-sections,--relax",
         "-mthumb",
-        "-Wl,--defsym=__rtc_localtime=$UNIX_TIME",
-        "-fsingle-precision-constant"
+        "-Wl,--defsym=__rtc_localtime=$UNIX_TIME"
     ],
 
     LIBS=["m", "stdc++"]
@@ -89,5 +87,19 @@ if "BOARD" in env:
         ],
         LINKFLAGS=[
             "-mcpu=%s" % env.BoardConfig().get("build.cpu")
+        ]
+    )
+
+if env.BoardConfig().get("build.core", "") != "teensy4":
+    env.Append(
+        ASFLAGS=[
+            "-mno-unaligned-access",
+        ],
+        CCFLAGS=[
+            "-mno-unaligned-access",
+            "-fsingle-precision-constant"
+        ],
+        LINKFLAGS=[
+            "-fsingle-precision-constant"
         ]
     )
