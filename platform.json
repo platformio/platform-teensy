@@ -25,10 +25,6 @@
       "package": "framework-arduinoteensy",
       "script": "builder/frameworks/arduino.py"
     },
-    "mbed": {
-      "package": "framework-mbed",
-      "script": "builder/frameworks/mbed.py"
-    },
     "zephyr": {
       "package": "framework-zephyr",
       "script": "builder/frameworks/zephyr.py"
@@ -59,12 +55,6 @@
       "optional": true,
       "owner": "platformio",
       "version": "~1.158.0"
-    },
-    "framework-mbed": {
-      "type": "framework",
-      "optional": true,
-      "owner": "platformio",
-      "version": "~6.51506.0"
     },
     "framework-zephyr": {
       "type": "framework",

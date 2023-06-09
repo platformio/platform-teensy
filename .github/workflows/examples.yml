@@ -12,9 +12,6 @@ jobs:
           - "examples/arduino-blink"
           - "examples/arduino-hid-usb-mouse"
           - "examples/arduino-internal-libs"
-          - "examples/mbed-blink"
-          - "examples/mbed-dsp"
-          - "examples/mbed-serial"
           - "examples/zephyr-blink"
           - "examples/zephyr-synchronization"
     runs-on: ${{ matrix.os }}
