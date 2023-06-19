@@ -136,13 +136,19 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
         else:
             encrypt_message = "Encrypting $TARGET with default key"
 
+        # Choose the correct board name for teensy_secure
+        if board_config.id == "teensymm":
+            board_name = "TEENSY_MICROMOD"
+        else:
+            board_name = board_config.id.upper()
+
         env.Append(
             BUILDERS=dict(
                 HexToEhex=Builder(
                     action=env.VerboseAction(" ".join([
                         "$TEENSYSECURE",
                         "encrypthex",
-                        board_config.id.upper(),
+                        board_name,
                         "$SOURCES",
                         custom_secure_key
                     ]), encrypt_message),
