@@ -19,15 +19,11 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "4.18.0",
+  "version": "5.0.0",
   "frameworks": {
     "arduino": {
       "package": "framework-arduinoteensy",
       "script": "builder/frameworks/arduino.py"
-    },
-    "mbed": {
-      "package": "framework-mbed",
-      "script": "builder/frameworks/mbed.py"
     },
     "zephyr": {
       "package": "framework-zephyr",
@@ -58,13 +54,7 @@
       "type": "framework",
       "optional": true,
       "owner": "platformio",
-      "version": "~1.158.0"
-    },
-    "framework-mbed": {
-      "type": "framework",
-      "optional": true,
-      "owner": "platformio",
-      "version": "~6.51506.0"
+      "version": "~1.159.0"
     },
     "framework-zephyr": {
       "type": "framework",
