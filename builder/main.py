@@ -96,7 +96,8 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
         OBJCOPY="arm-none-eabi-objcopy",
         RANLIB="arm-none-eabi-gcc-ranlib",
         SIZETOOL="arm-none-eabi-size",
-        SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES"
+        SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
+        TEENSYSECURE="teensy_secure"
     )
 
     env.Append(
@@ -126,6 +127,35 @@ elif "BOARD" in env and build_core in ("teensy3", "teensy4"):
             )
         )
     )
+
+    if build_core == "teensy4":
+        # Get the key and default to an empty string
+        custom_secure_key = env.GetProjectConfig().get("env:" + env["PIOENV"], "custom_secure_key", "")
+        if custom_secure_key:
+            encrypt_message = f"Encrypting $TARGET with key at {custom_secure_key}"
+        else:
+            encrypt_message = "Encrypting $TARGET with default key"
+
+        # Choose the correct board name for teensy_secure
+        if board_config.id == "teensymm":
+            board_name = "TEENSY_MICROMOD"
+        else:
+            board_name = board_config.id.upper()
+
+        env.Append(
+            BUILDERS=dict(
+                HexToEhex=Builder(
+                    action=env.VerboseAction(" ".join([
+                        "$TEENSYSECURE",
+                        "encrypthex",
+                        board_name,
+                        "$SOURCES",
+                        custom_secure_key
+                    ]), encrypt_message),
+                    suffix=".ehex"
+                )
+            )
+        )
 
     if not env.get("PIOFRAMEWORK"):
         env.SConscript("frameworks/_bare_arm.py")
@@ -174,6 +204,8 @@ if "nobuild" in COMMAND_LINE_TARGETS:
 else:
     target_elf = env.BuildProgram()
     target_firm = env.ElfToHex(join("$BUILD_DIR", "${PROGNAME}"), target_elf)
+    if build_core == "teensy4":
+        target_firm = env.HexToEhex(join("$BUILD_DIR", "${PROGNAME}"), target_firm)
     env.Depends(target_firm, "checkprogsize")
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
