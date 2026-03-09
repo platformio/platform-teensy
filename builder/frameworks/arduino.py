@@ -154,7 +154,8 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
             "-fno-rtti",
             "-std=gnu++17",
             "-Wno-error=narrowing",
-            "-fpermissive"
+            "-fpermissive",
+            "-Wno-psabi"
         ],
 
         CPPDEFINES=[
