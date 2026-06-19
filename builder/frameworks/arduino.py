@@ -155,7 +155,8 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
             "-std=gnu++17",
             "-Wno-error=narrowing",
             "-fpermissive",
-            "-Wno-psabi"
+            "-Wno-psabi",
+            "-Wno-maybe-uninitialized"
         ],
 
         CPPDEFINES=[
@@ -166,7 +167,7 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
         RANLIBFLAGS=["-s"],
 
         LINKFLAGS=[
-            "-Wl,--gc-sections,--relax",
+            "-Wl,--gc-sections,--relax,--no-warn-rwx-segments",
             "-mthumb",
             "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
             "-Wl,--defsym=__rtc_localtime=$UNIX_TIME"
@@ -208,8 +209,18 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
     # Optimization
     if "TEENSY_OPT_FASTER_LTO" in env['CPPDEFINES']:
         env.Append(
-            CCFLAGS=["-O2", "-flto", "-fno-fat-lto-objects"],
-            LINKFLAGS=["-O2", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+            CCFLAGS=["-O2", "-flto=auto", "-fno-fat-lto-objects"],
+            LINKFLAGS=["-O2", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+        )
+    elif "TEENSY_OPT_FASTER_NANOLIBC" in env['CPPDEFINES']:
+        env.Append(
+            CCFLAGS=["-O2"],
+            LINKFLAGS=["-O2", "--specs=nano.specs"]
+        )
+    elif "TEENSY_OPT_FASTER_LTO_NANOLIBC" in env['CPPDEFINES']:
+        env.Append(
+            CCFLAGS=["-O2", "-flto=auto", "-fno-fat-lto-objects"],
+            LINKFLAGS=["-O2", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin", "--specs=nano.specs"]
         )
     elif "TEENSY_OPT_FAST" in env['CPPDEFINES']:
         env.Append(
@@ -218,8 +229,8 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
         )
     elif "TEENSY_OPT_FAST_LTO" in env['CPPDEFINES']:
         env.Append(
-            CCFLAGS=["-O1", "-flto", "-fno-fat-lto-objects"],
-            LINKFLAGS=["-O1", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+            CCFLAGS=["-O1", "-flto=auto", "-fno-fat-lto-objects"],
+            LINKFLAGS=["-O1", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
     elif "TEENSY_OPT_FASTEST" in env['CPPDEFINES']:
         env.Append(
@@ -228,8 +239,8 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
         )
     elif "TEENSY_OPT_FASTEST_LTO" in env['CPPDEFINES']:
         env.Append(
-            CCFLAGS=["-O3", "-flto", "-fno-fat-lto-objects"],
-            LINKFLAGS=["-O3", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+            CCFLAGS=["-O3", "-flto=auto", "-fno-fat-lto-objects"],
+            LINKFLAGS=["-O3", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
     elif "TEENSY_OPT_FASTEST_PURE_CODE" in env['CPPDEFINES']:
         env.Append(
@@ -239,9 +250,9 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
         )
     elif "TEENSY_OPT_FASTEST_PURE_CODE_LTO" in env['CPPDEFINES']:
         env.Append(
-            CCFLAGS=["-O3", "-mpure-code", "-flto", "-fno-fat-lto-objects"],
+            CCFLAGS=["-O3", "-mpure-code", "-flto=auto", "-fno-fat-lto-objects"],
             CPPDEFINES=["__PURE_CODE__"],
-            LINKFLAGS=["-O3", "-mpure-code", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+            LINKFLAGS=["-O3", "-mpure-code", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
     elif "TEENSY_OPT_DEBUG" in env['CPPDEFINES']:
         env.Append(
@@ -250,13 +261,13 @@ elif "BOARD" in env and BUILD_CORE in ("teensy3", "teensy4"):
         )
     elif "TEENSY_OPT_DEBUG_LTO" in env['CPPDEFINES']:
         env.Append(
-            CCFLAGS=["-g", "-Og", "-flto", "-fno-fat-lto-objects"],
-            LINKFLAGS=["-g", "-Og", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+            CCFLAGS=["-g", "-Og", "-flto=auto", "-fno-fat-lto-objects"],
+            LINKFLAGS=["-g", "-Og", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
     elif "TEENSY_OPT_SMALLEST_CODE_LTO" in env['CPPDEFINES']:
         env.Append(
-            CCFLAGS=["-Os", "--specs=nano.specs", "-flto", "-fno-fat-lto-objects"],
-            LINKFLAGS=["-Os", "--specs=nano.specs", "-flto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
+            CCFLAGS=["-Os", "--specs=nano.specs", "-flto=auto", "-fno-fat-lto-objects"],
+            LINKFLAGS=["-Os", "--specs=nano.specs", "-flto=auto", "-fno-fat-lto-objects", "-fuse-linker-plugin"]
         )
     elif "TEENSY_OPT_FASTER" in env['CPPDEFINES']:
         env.Append(
