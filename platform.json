@@ -48,7 +48,7 @@
       "type": "toolchain",
       "optional": false,
       "owner": "platformio",
-      "version": "~1.110301.0"
+      "version": "~1.150201.0"
     },
     "framework-arduinoteensy": {
       "type": "framework",
