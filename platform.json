@@ -19,7 +19,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-teensy.git"
   },
-  "version": "5.2.0",
+  "version": "6.0.0",
   "frameworks": {
     "arduino": {
       "package": "framework-arduinoteensy",
@@ -60,7 +60,7 @@
       "type": "framework",
       "optional": true,
       "owner": "platformio",
-      "version": "~2.20701.0"
+      "version": "~3.40402.0"
     },
     "tool-teensy": {
       "type": "uploader",
