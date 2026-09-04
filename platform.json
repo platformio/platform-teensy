@@ -60,7 +60,7 @@
       "type": "framework",
       "optional": true,
       "owner": "platformio",
-      "version": "~2.20701.0"
+      "version": "~3.40402.0"
     },
     "tool-teensy": {
       "type": "uploader",
